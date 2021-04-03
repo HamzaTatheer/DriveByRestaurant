@@ -1,0 +1,1 @@
+add basic guide in README.md
