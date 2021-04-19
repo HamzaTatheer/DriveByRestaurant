@@ -1,4 +1,5 @@
 export const signIn = (email,password) => {
+	console.log("SIGNED ACTION");
 	
 	return (dispatch)=>{
 		return new Promise((resolve,reject)=>{
@@ -15,7 +16,8 @@ export const signIn = (email,password) => {
 						}
 					}
 				);
-				resolve();
+				console.log("HELLO");
+				resolve("customer");
 			},2000)
 		})
 	}

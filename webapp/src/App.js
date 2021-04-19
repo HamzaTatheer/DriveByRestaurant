@@ -19,7 +19,7 @@ function App() {
 			<Router>
 				<Switch>
 					<Route exact path={["/","/login"]} component={Login} />
-          <Route exact path="/signup" component={SignUp} />
+          			<Route exact path="/signup" component={SignUp} />
 					<ProtectedRoute privelage="admin" path="/admin" component={AdminPage}/>
 					<ProtectedRoute privelage="customer" path="/customer" component={CustomerPage}/>
 					<ProtectedRoute privelage="delivery" path="/delivery" component={DeliveryPage}/>

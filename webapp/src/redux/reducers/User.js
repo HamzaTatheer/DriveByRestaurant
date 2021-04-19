@@ -1,7 +1,10 @@
 const authReducer = (state = null, action) => {
+	console.log(action);
+
 	switch(action.type){
 
 		case "SIGN_IN":{
+			console.log("REDUCER");
 			let userDetails = action.payload;
 			localStorage.setItem("se-user",JSON.stringify(userDetails));
 			return userDetails;

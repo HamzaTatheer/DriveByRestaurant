@@ -10,7 +10,7 @@ const ProtectedRoute = ({role, component: Component, user, ...rest }) => {
         <>
             <Route {...rest} render={
                 props => {
-                    if (localStorage.getItem("rnr-user") != null && user.role == role) {
+                    if (localStorage.getItem("se-user") != null && user.role == "customer") {
                         return <Component {...props} />
                     }
                     else {
