@@ -1,3 +1,63 @@
-.customer_menu{
-  background: #FF007F;
+.appBar{
+  background: #696060;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+
+
+
+.menuButton{
+  text-align: center;
+}
+
+.menuButton:hover{
+  background: black;
+  cursor: pointer;
+}
+
+
+/*--------------Home Menu----------------------*/
+
+.home-mobile-menu{
+  color: white;
+}
+
+.home-desktop-menu{
+  color: white;
+}
+
+@media screen and (max-width: 768px){
+  .home-mobile-menu{
+    display: block;
+  }
+  
+  .home-desktop-menu{
+    display: none;
+  }
+}
+
+@media screen and (min-width: 768px){
+  .home-mobile-menu{
+    display: none;
+  }
+}
+
+
+/* ------------Font responsivness--------------------------*/
+
+/* Uses vh and vm with calc */
+@media screen and (min-width: 25em){
+  html { font-size: 8px }
+}
+
+
+@media screen and (min-width: 32em){
+  html { font-size: 12px }
+}
+
+
+@media screen and (min-width: 50em){
+html { font-size: 19px; }
 }
