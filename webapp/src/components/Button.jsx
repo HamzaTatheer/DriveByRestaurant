@@ -8,7 +8,25 @@ export default function Button(props){
             </div>
         );
    }
-   else {
-       throw Error("Button type should be passed as props");
+   else if(props.plusButton==true){
+        return (
+            <div style={{fontSize:"1.2em",width:"38px",height:"32px",background:"#E35A5A",color:"white"}} className="d-flex justify-content-center align-items-center">
+                    +             
+            </div>
+        );
+   }
+   else if(props.minusButton==true){
+    return (
+        <div style={{fontSize:"1.2em",width:"38px",height:"32px",background:"#E35A5A",color:"white"}} className="d-flex justify-content-center align-items-center">
+                -         
+        </div>
+    );
+  }
+  else {
+       return (
+        <div>
+        <input onClick={props.onClick} style={{background:"white",borderRadius:"10px",outline:"none",padding:"10px 20px 10px 20px"}} type="button" value={props.label}/>  
+        </div>
+       );
    }
 }

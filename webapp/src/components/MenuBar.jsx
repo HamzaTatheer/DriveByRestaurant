@@ -14,10 +14,10 @@ export default function MenuBar(props){
         <Appbar>
 
         <div className="home-desktop-menu">
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"5px"}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"5px",paddingLeft:"10px",paddingRight:"10px"}}>
 
                         <div style={{color:"white"}}>
-                            <h3>Hardees</h3>
+                            <h3 style={{cursor:"pointer"}} onClick={()=>window.location.href="/"}>Hardees</h3>
                         </div>
 
                         <div className="d-flex" style={{color:"white"}}>
@@ -30,7 +30,7 @@ export default function MenuBar(props){
         <div style={{position:"relative"}} className="home-mobile-menu">
 
 
-            <div style={{paddingTop:"10px"}} className="d-flex justify-content-between align-items-center">
+            <div style={{paddingTop:"10px",paddingLeft:"10px",paddingRight:"10px"}} className="d-flex justify-content-between align-items-center">
                 <div style={{marginBottom:"0.5rem"}} onClick={()=>setDrawerOpen((val)=>!val)}>
                     {drawerOpen == false ?<MenuIcon/>:<CancelIcon/> }
                 </div>
@@ -43,7 +43,7 @@ export default function MenuBar(props){
             {
             drawerOpen==true ?
 
-                <div style={{postion:"absolute"}}>
+                <div style={{position:"absolute",width:"100%",background:"#E35A5A",zIndex:"10"}}>
                     {props.children}
                 </div> 
                 :
