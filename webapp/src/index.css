@@ -1,5 +1,13 @@
+a{
+  color:#E35A5A;
+}
+
+a:hover{
+  color:#E35A5A;
+}
+
 .appBar{
-  background: #696060;
+  background: #e35a5a;
   padding-left: 20px;
   padding-right: 20px;
 }
