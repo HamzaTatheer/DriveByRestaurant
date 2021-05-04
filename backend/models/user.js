@@ -16,7 +16,19 @@ const userSchema = new mongoose.Schema({
         minlength: 5,
         maxlength: 255,
     },
-    isAdmin: Boolean
+    phone: {
+        type: String,
+        required: true,
+        max: 11,
+        min: 11,
+    },
+    role: {
+        type: Number,
+        required: true,
+        default: 2, // 2 is for customer, 1 for the cashier and 0 for admin
+        max: 2,
+        min: 0,
+    }
 });
 
 userSchema.methods.generateAuthToken = function() {
@@ -29,7 +41,8 @@ function validateUser(user) {
     const schema = Joi.object({
         name: Joi.string().min(5).max(50).required(),
         password: Joi.string().min(5).max(255).required(),
-        isAdmin: Joi.boolean(),
+        phone: Joi.string().min(11).max(11).required(),
+        role: Joi.number().default(2).min(0).max(2).required(),
     });
     return schema.validate(user);
 }
