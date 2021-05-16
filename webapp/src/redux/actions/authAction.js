@@ -1,38 +1,29 @@
-export const signIn = (email,password) => {
-	console.log("SIGNED ACTION");
-	
-	return (dispatch)=>{
-		return new Promise((resolve,reject)=>{
-			setTimeout(()=>{
+export const SIGN_IN = "SIGN_IN";
+export const SIGN_UP = "SIGN_UP";
+export const SIGN_OUT = "SIGN_OUT";
 
-				dispatch(
-					{
-						type: "SIGN_IN",
-						payload: {
-							name:"hamza",
-							role:"customer",
-							accessToken:"123123123",
-							refreshToken:"12321",
-						}
-					}
-				);
-				console.log("HELLO");
-				resolve("customer");
-			},2000)
-		})
-	}
-	
+
+export const signIn = (pfp,name,phone,role,token) => {
+	return (
+			{
+				type: SIGN_IN,
+				payload: {
+					pfp,
+					name,
+					phone,
+					role,
+					token
+				}
+			}
+		);
+
 };
 
-export const signUp = (firstName,lastName,email,password) => {
-	
-	return (dispatch)=>{
-		return new Promise((resolve,reject)=>{
-			setTimeout(()=>{
-
-				dispatch(
+export const signUp = (firstName,lastName,phone,password) => {
+					
+	return (
 					{
-						type: "SIGN_UP",
+						type: SIGN_UP,
 						payload: {
 							name:"hamza",
 							role:"customer",
@@ -40,12 +31,7 @@ export const signUp = (firstName,lastName,email,password) => {
 							refreshToken:"12321",
 						}
 					}
-				);
-				resolve();
-			},2000)
-		})
-	}
-	
+	);
 };
 
 
@@ -53,6 +39,6 @@ export const signUp = (firstName,lastName,email,password) => {
 
 export const signOut = () => {
 	return{
-		type: "SIGN_OUT"
+		type: SIGN_OUT,
 	};
 };

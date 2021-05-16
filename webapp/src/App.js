@@ -9,8 +9,6 @@ import AdminPage from "./pages/admin/";
 import CustomerPage from "./pages/customer/";
 import DeliveryPage from "./pages/cashier/";
 
-
-
 // the "/" is default route like localhost:3000
 //rest are specific routes
 //so basically there exists a variable called "path" which Route is always looking

@@ -1,9 +1,13 @@
 import React, { Component, useState } from "react";
 import { Route, Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
+import {useSelector} from "react-redux";
 
 
-const ProtectedRoute = ({role, component: Component, user, ...rest }) => {
+const ProtectedRoute = ({privelage, component: Component, ...rest }) => {
+
+
+    let user = useSelector((state)=>state.user);
 
 
     return (

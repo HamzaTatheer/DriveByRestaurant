@@ -1,31 +1,36 @@
 import React from "react";
 import Burger from "../../assets/customer/burger.png";
+import {useDispatch} from "react-redux";
+import {addToCart,removeFromCart} from "../../redux/actions/cartAction";
 
-export default function FoodCard(){
+export default function FoodCard({id,name,description,price,category}){
+
+    let dispatch = useDispatch();
+
     return (
         <div class="card">
         <div className="d-flex justify-content-center">
             <div style={{height:"250px",width:"100%",background:"#FFF9F9"}} className="d-flex justify-content-center align-items-center">
-                <img src={Burger} width="60%"/>
+                <img src={Burger} width="250px"/>
             </div>
         </div>
 
         <div class="card-body">
             <div className="d-flex justify-content-between">
                 <div>
-                    <h5 class="card-title">Spaghetti</h5>
+                    <h5 class="card-title">{name}</h5>
                 </div>
                 <div>
-                    <b>Rs. 300</b>
+                    <b>Rs. {price}</b>
                 </div>
             </div>
             <p class="card-text">
                 <small>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.
+                {description}
                 </small>
             </p>
             <div className="d-flex justify-content-center">
-                <a href="#" class="btn btn-primary">Add To Cart</a>
+                <a onClick={()=>dispatch(addToCart(id))} class="btn btn-primary">Add To Cart</a>
             </div>
         </div>
     </div>

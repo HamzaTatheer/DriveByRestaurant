@@ -38,7 +38,7 @@ ReactDOM.render(
 	<React.StrictMode>
 		<Provider store={store}>
 			<ThemeProvider theme={theme}>
-			<App />
+				<App />
 			</ThemeProvider>
 		</Provider>
 	</React.StrictMode>,
