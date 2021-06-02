@@ -1,5 +1,5 @@
 
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import {Route, Switch,useRouteMatch } from "react-router-dom";
 import ArrowIcon from "@material-ui/icons/ArrowBack";
 import StatusCard from "../../components/Customer/StatusCards";
@@ -15,9 +15,11 @@ import WaitingAnimation from "../../components/Customer/WaitingAnimation";
 import ChatBox from "../../components/Customer/ChatBox";
 import {useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
-
+import Dialog from '@material-ui/core/Dialog';
 
 function MenuScreen(props){
+
+
 
 
     let foodItems = [
@@ -55,9 +57,15 @@ function MenuScreen(props){
             });
     }
 
+    let [isOpen,setOpen] = useState(false);
 
     return (
     <div>
+        <Dialog fullWidth open={isOpen} onClose={()=>setOpen(false)}>
+            <div style={{textAlign:"center",margin:"10px"}}>
+                <h1>Most Ordered Today</h1>
+            </div>
+        </Dialog>
         
     <div style={{position:"fixed",zIndex:1,bottom:"20px",right:"30px",cursor:"pointer"}} onClick={()=>props.history.push("/customer/checkout")}>
         <Cart/>
