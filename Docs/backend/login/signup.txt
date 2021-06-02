@@ -1,0 +1,12 @@
+Request Type: Post
+Route: /api/signup
+Additional Headers: none
+Parameters: none
+Body: { name , password }
+
+
+-------------------------
+Response
+Parameter: none
+body: { name, _id}
+status: 200
