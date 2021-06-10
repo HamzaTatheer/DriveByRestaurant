@@ -5,13 +5,12 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const auth = require("../middleware/auth");
 
-const { User, validate } = require("../models/user");
+const { User, validateLogin, validateSignup } = require("../models/user");
 
 router.post("/signup", async(req, res) => {
     try {
-        const { error } = validate(req.body);
+        const { error } = validateSignup(req.body);
 
         if (error) { return res.status(400).send(error.details[0].message); }
 
@@ -34,8 +33,8 @@ router.post("/signup", async(req, res) => {
 
 router.post("/login", async(req, res) => {
     try {
-        const { error } = validate(req.body);
-        if (error) return res.status(400).send(error.details[0].message);
+        const { error } = validateLogin(req.body);
+        if (error) return res.status(400).send(error);
     
         let user = await User.findOne({phone: req.body.phone});
         if (!user) return res.status(400).send("Invalid email or password");
