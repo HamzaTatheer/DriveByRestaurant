@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import ArrowIcon from "@material-ui/icons/ArrowBack";
 import StatusCard from "../../components/Customer/StatusCards";
@@ -14,6 +14,7 @@ import WaitingAnimation from "../../components/Customer/WaitingAnimation";
 import ChatBox from "../../components/Customer/ChatBox";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import Dialog from "@material-ui/core/Dialog";
 
 function MenuScreen(props) {
   let foodItems = [
@@ -65,8 +66,16 @@ function MenuScreen(props) {
       });
   };
 
+  let [isOpen, setOpen] = useState(false);
+
   return (
     <div>
+      <Dialog fullWidth open={isOpen} onClose={() => setOpen(false)}>
+        <div style={{ textAlign: "center", margin: "10px" }}>
+          <h1>Most Ordered Today</h1>
+        </div>
+      </Dialog>
+
       <div
         style={{
           position: "fixed",
@@ -91,45 +100,26 @@ function MenuScreen(props) {
         <div className="row no-gutters" style={{ marginTop: "30px" }}>
           <div className="col-sm-0 col-md-1"></div>
 
-          <div className="col-sm-12 col-md-10">
-            <div className="d-flex justify-content-between">
-              <SearchBar
-                onChange={(val) => setSearch(val)}
-                style={{ width: "60vw" }}
-              />
-              <Select
-                style={{ width: "20vw", paddingLeft: "10px" }}
-                value={category}
-                onChange={(e) => changeCategory(e.target.value)}
-              >
-                <MenuItem value="All">All</MenuItem>
-                {categories.map((name, index) => (
-                  <MenuItem value={name}>{name}</MenuItem>
-                ))}
-              </Select>
-            </div>
-
-            <div style={{ marginTop: "20px" }}>
-              <div class="row row-cols-12">
-                {filteredListBySearch(filteredListByCategory(foodItems)).map(
-                  ({ id, name, description, category, price }) => (
-                    <div class="col mb-4">
-                      <FoodCard
-                        id={id}
-                        name={name}
-                        description={description}
-                        category={category}
-                        price={price}
-                      />
-                    </div>
-                  )
-                )}
-              </div>
+          <div style={{ marginTop: "20px" }}>
+            <div class="row row-cols-12">
+              {filteredListBySearch(filteredListByCategory(foodItems)).map(
+                ({ id, name, description, category, price }) => (
+                  <div class="col mb-4">
+                    <FoodCard
+                      id={id}
+                      name={name}
+                      description={description}
+                      category={category}
+                      price={price}
+                    />
+                  </div>
+                )
+              )}
             </div>
           </div>
-
-          <div className="col-sm-0 col-md-1"></div>
         </div>
+
+        <div className="col-sm-0 col-md-1"></div>
       </div>
     </div>
   );
