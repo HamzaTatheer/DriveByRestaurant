@@ -42,9 +42,9 @@ router.post("/login", async(req, res) => {
         validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) return res.status(400).send("Invalid email or password");
 
-        const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
+        const token = jwt.sign({ _id: user._id}, config.get("jwtPrivateKey"));
 
-        res.send(token);
+        res.send({id: user._id, name: user.name, role: user.role,access_token:token}); // all these parameters are needed. do not change them.  token will be sent later for validation
     }
     catch(ex) {
         console.log(ex.message);
