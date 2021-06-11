@@ -3,6 +3,7 @@ const _ = require("lodash");
 const app = express();
 
 require('./startup/config')();
+require('./startup/dotenv')();
 require('./startup/routes')(app);
 require('./startup/logging')();
 require('./startup/db')();
