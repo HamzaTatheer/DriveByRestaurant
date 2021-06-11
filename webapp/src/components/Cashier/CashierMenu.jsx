@@ -12,19 +12,9 @@ export default function Home() {
     <MenuBar>
       <Button onClick={() => history.push("/")} menuButton label="Home" />
       <Button
-        onClick={() => history.push("/customer")}
+        onClick={() => history.push("/delivery/orders")}
         menuButton
-        label="Order Food"
-      />
-      <Button
-        onClick={() => history.push("/customer/profileSettings")}
-        menuButton
-        label="Profile Settings"
-      />
-      <Button
-        onClick={() => history.push("/customer/orderHistory")}
-        menuButton
-        label="Order History"
+        label="Orders"
       />
       <Button onClick={() => dispatch(signOut())} menuButton label="Logout" />
     </MenuBar>

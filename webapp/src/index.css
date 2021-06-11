@@ -1,70 +1,95 @@
-a{
-  color:#E35A5A;
+a {
+  color: #e35a5a;
 }
 
-a:hover{
-  color:#E35A5A;
+a:hover {
+  color: #e35a5a;
 }
 
-.appBar{
+.appBar {
   background: #e35a5a;
-
 }
 
-
-
-
-
-.menuButton{
+.menuButton {
   text-align: center;
 }
 
-.menuButton:hover{
+.menuButton:hover {
   background: black;
   cursor: pointer;
 }
 
-
 /*--------------Home Menu----------------------*/
 
-.home-mobile-menu{
+.home-mobile-menu {
   color: white;
 }
 
-.home-desktop-menu{
+.home-desktop-menu {
   color: white;
 }
 
-@media screen and (max-width: 768px){
-  .home-mobile-menu{
+@media screen and (max-width: 768px) {
+  .home-mobile-menu {
     display: block;
   }
-  
-  .home-desktop-menu{
+
+  .home-desktop-menu {
     display: none;
   }
 }
 
-@media screen and (min-width: 768px){
-  .home-mobile-menu{
+@media screen and (min-width: 768px) {
+  .home-mobile-menu {
     display: none;
   }
 }
-
 
 /* ------------Font responsivness--------------------------*/
 
 /* Uses vh and vm with calc */
-@media screen and (min-width: 25em){
-  html { font-size: 8px }
+@media screen and (min-width: 25em) {
+  html {
+    font-size: 8px;
+  }
 }
 
-
-@media screen and (min-width: 32em){
-  html { font-size: 12px }
+@media screen and (min-width: 32em) {
+  html {
+    font-size: 12px;
+  }
 }
 
+@media screen and (min-width: 50em) {
+  html {
+    font-size: 19px;
+  }
+}
 
-@media screen and (min-width: 50em){
-html { font-size: 19px; }
+.orderbox {
+  display: flex;
+}
+
+.orderbox_details {
+  flex: 50%;
+  padding-left: 60px;
+}
+
+.orderbox_status {
+  flex: 50%;
+}
+.orderbox_details > p {
+  font-weight: bold;
+}
+.orderbox_status > p {
+  font-weight: bold;
+}
+
+.chatbox {
+}
+.chatbox > p {
+  font-weight: bold;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-top: 30px;
 }
