@@ -4,7 +4,6 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-
 const { User, validateLogin, validateSignup } = require("../models/user");
 
 router.post("/login", async(req, res) => {
@@ -18,13 +17,19 @@ router.post("/login", async(req, res) => {
         validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) return res.status(400).send("Invalid phone number or password");
 
-        const token = jwt.sign({ _id: user._id}, process.env.JWT_PRIVATE_KEY);
+        const token = jwt.sign({ _id: user._id,role: user.role}, process.env.JWT_PRIVATE_KEY);
 
-        res.send({id: user._id, name: user.name, role: user.role,access_token:token}); // all these parameters are needed. do not change them.  token will be sent later for validation
+        res.send({id: user._id,avatar: user.avatar, name: user.name, role: user.role,access_token:token}); // all these parameters are needed. do not change them.  token will be sent later for validation
     }
     catch(ex) {
         console.log(ex.message);
     }
 });
+
+//show all foods
+//change profile details
+//get User details by id. Besides password ofcourse
+//get all food categories
+
 
 module.exports = router;
