@@ -9,8 +9,7 @@ const upload = require("../middleware/multer")("public/uploads/profile_pictures/
 router.post("/signup",upload.single('avatar'), async(req, res) => {
     try {
 
-        const { error } = validateSignup(req.body,2);//2 is customer role 
-
+        const { error } = validateSignup(req.body);//2 is customer role 
         if (error) { return res.status(400).send(error.details[0].message); }
 
         let user = await User.findOne({phone: req.body.phone});
@@ -20,7 +19,7 @@ router.post("/signup",upload.single('avatar'), async(req, res) => {
         user_data.avatar = req.file ? req.file.filename : null;
         user_data.role = 2;
         user = new User(user_data);
-
+      
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
         await user.save();
