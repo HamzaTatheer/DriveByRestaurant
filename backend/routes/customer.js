@@ -1,33 +1,41 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const config = require("config")
 
 const { User, validateSignup } = require("../models/user");
+const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
-router.post("/signup", async(req, res) => {
+router.post("/signup",upload.single('avatar'), async(req, res) => {
     try {
-        const { error } = validateSignup(req.body);
 
+        const { error } = validateSignup(req.body);//2 is customer role 
         if (error) { return res.status(400).send(error.details[0].message); }
 
         let user = await User.findOne({phone: req.body.phone});
-        if (user) { return res.status(400).send("User already exists"); }
+        if (user) { return res.status(400).send("Customer is already registered"); }
 
-        user = new User(_.pick(req.body, ["name", "password", "phone"]));
-		user.role = 2;
-		// creating a new property for user as here we are defining the customers only.
+        let user_data = _.pick(req.body, ["name", "password", "phone"]);
+        user_data.avatar = req.file ? req.file.filename : null;
+        user_data.role = 2;
+        user = new User(user_data);
+      
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
         await user.save();
 
         const token = user.generateAuthToken();
-        res.header("x-auth-token", token).send(_.pick(user,["name", "_id", "role"]));
+        res.header("access_token", token).send(_.pick(user,["name", "_id", "role", "avatar"]));
     }
     catch(ex) {
         console.log(ex.message);
     }
 });
+
+//orderFood
+//getFoodOfTheDay
+//view active order details
+//view my order history
+
+
+module.exports = router;
