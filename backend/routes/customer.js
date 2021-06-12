@@ -76,7 +76,7 @@ router.post("/orderFood", auth, async(req, res) => {
 //getFoodOfTheDay
 //view active order details
 //view my order history
-router.get("/orderHistory",async(req, res) => {
+router.get("/orderHistory", auth, async(req, res) => {
     try {
 
         let user = await User.findOne({phone: req.body.phone});
@@ -93,5 +93,19 @@ router.get("/orderHistory",async(req, res) => {
     }
 });
 
+router.get("/viewActiveOrders", auth, async (req, res) => {
+    try {
+        let currentUser = req.user;
+
+        const orders = await Order.find({ user: {_id: currentUser._id, name: currentUser.name}, status : ["Queued", "Cooking"] })
+            .sort({ date : 1 })
+            .lean();
+
+        res.send(orders);
+    }
+    catch (ex) {
+        console.log(ex.message);
+    }
+});
 
 module.exports = router;
