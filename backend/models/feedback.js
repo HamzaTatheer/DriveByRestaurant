@@ -37,7 +37,7 @@ function validateFeedback(feedback){
         message: Joi.string().required()
     });
 
-    return schema.validate(order);
+    return schema.validate(feedback);
 };
 
 exports.Feedback = Feedback

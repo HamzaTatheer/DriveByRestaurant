@@ -1,7 +1,5 @@
-const Joi = require("joi");
 const mongoose = require("mongoose");
-const config = require("config");
-const jwt = require("jsonwebtoken");
+const Joi = require('joi');
 
 const foodItemSchema = new mongoose.Schema ({
     name: {
@@ -16,8 +14,15 @@ const foodItemSchema = new mongoose.Schema ({
         min: 0,
     },
     category:{
-		type: mongoose.Schema.Types.ObjectId,      
-		ref: "categorySchema",
+        type: new mongoose.Schema({
+            name : {
+                type : String,
+                required : true,
+                minlength : 4,
+                maxlength : 100 
+            },
+        }),
+        required: true
     },
     ingredients: {
         type: [String],
@@ -26,22 +31,27 @@ const foodItemSchema = new mongoose.Schema ({
     description: {
         type: String,
         requried: true,
-    }
+    },
+    avatar:{
+        type: String,
+        required: false
+    },
 });
 
-const FoodItem = mongoose.model('FoodItem', foodItemSchema);
+const FoodItem = mongoose.model('FoodItems', foodItemSchema);
 
 function validateFoodItems(category){
-    const schema = {
+    const schema = Joi.object({
         name: Joi.string().min(3).max(50).required(),
-        price = Joi.number().min(0).required(),
-        category = Joi.objectId(),
-        ingredients = Joi.required(),
-        description: Joi.string().required(),
-    };
+        price : Joi.number().min(0).required(),
+        category : Joi.objectId(),
+        ingredients : Joi.required(),
+        description : Joi.string().required(),
+    });
 
-    return Joi.validate(category, schema);
+    return schema.validate(category);
 };
 
 exports.FoodItem = FoodItem;
-exports.validateFoodItems = validateFoodItem;
+exports.foodItemSchema = foodItemSchema;
+exports.validateFoodItems = validateFoodItems;

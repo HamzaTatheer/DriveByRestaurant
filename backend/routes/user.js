@@ -33,5 +33,4 @@ router.post("/login", async(req, res) => {
 //get User details by id. Besides password ofcourse
 //get all food categories
 
-
 module.exports = router;

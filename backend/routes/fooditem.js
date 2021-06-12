@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {Category, validateCategory} = require('../models/category');
-const {FoodItem, validateFoodItem} = require('../models/foodItem');
+const {FoodItem, validateFoodItems} = require('../models/fooditem');
 
 //Get all foodItems
 router.get('/', async (req, res) => {
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
             .sort({ name: 1 })
             .lean();
     
-        res.send(FoodItems);
+        res.send(foodItems);
     } 
     catch (error) {
         res.status(500).send('Server Error.');
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
 //Post a foodItem
 router.post('/', async (req, res) => {
-    const { error } = validateFoodItem(req.body);
+    const { error } = validateFoodItems(req.body);
 
     if(error)
         return res.status(400).send(error.details[0].message);
@@ -49,3 +49,5 @@ router.post('/', async (req, res) => {
     res.send(foodItem);
     
 });
+
+module.exports = router;

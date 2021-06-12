@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 const auth = require('../middleware/auth');
 const { User, validateSignup } = require("../models/user");
-const {FoodItems, validateFoodItems, foodItemSchema} = require('../models/foodItem');
+const {FoodItem} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
 const {Order, validateOrder} = require('../models/order');
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
@@ -50,7 +50,7 @@ router.post("/orderFood", auth, async(req, res) => {
         if(!user)  return res.status(400).send("No customer with this ID.");
 
         req.body.foodItems.forEach(async(item) => {
-            let food = await FoodItems.findById(item);
+            let food = await FoodItem.findById(item);
             if (!food)  return res.status(400).send("No food item with this ID.");
         });
 
@@ -75,6 +75,22 @@ router.post("/orderFood", auth, async(req, res) => {
 //getFoodOfTheDay
 //view active order details
 //view my order history
+router.get("/orderHistory",async(req, res) => {
+    try {
+
+        let user = await User.findOne({phone: req.body.phone});
+        if (!user_) { return res.status(400).send("Customer does not exist"); }
+
+        const orders = await Order.find({_id : user._id })
+            .sort({ date : 1 })
+            .lean();
+    
+        res.send(orders);
+    }
+    catch(ex) {
+        console.log(ex.message);
+    }
+});
 
 
 module.exports = router;

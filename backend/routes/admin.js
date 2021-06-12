@@ -7,7 +7,7 @@ const Joi = require("joi");
 
 const auth = require('../middleware/auth');
 const { User, validateSignup } = require("../models/user");
-const {FoodItems, validateFoodItems} = require('../models/foodItem');
+const {FoodItem, validateFoodItems} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
@@ -73,7 +73,7 @@ router.post('/addFoodItem', [auth, jwt_verify, upload.single('avatar')], async (
         if(!category)
             return res.status(400).send("Category not found."); 
 
-        const foodItem = new FoodItems ({
+        const foodItem = new FoodItem ({
             name : req.body.name,
             price : req.body.price,
             category : {
@@ -101,7 +101,7 @@ router.post("/removeFoodItem", auth, async(req, res) => {
 
         if(!req.body.id) res.status(400).send("No Food Item with this id.");
 
-        FoodItems.findByIdAndDelete(req.body.id).then(doc => doc ? res.send(doc) : res.status(400).send("Food Item not found")).catch((err)=>res.status(500).send());
+        FoodItem.findByIdAndDelete(req.body.id).then(doc => doc ? res.send(doc) : res.status(400).send("Food Item not found")).catch((err)=>res.status(500).send());
 
     }
     catch(ex) {
@@ -115,7 +115,7 @@ router.get("/getAllFoodItems", auth, async(req, res) => {
     try {
         if(req.user.role != 0) return res.status(403).send("Access Denied");
 
-        FoodItems.find().then(doc => doc ? res.send(doc) : res.status(400).send("Food Item not found")).catch((err)=>res.status(500).send());
+        FoodItem.find().then(doc => doc ? res.send(doc) : res.status(400).send("Food Item not found")).catch((err)=>res.status(500).send());
 
     }
     catch(ex) {

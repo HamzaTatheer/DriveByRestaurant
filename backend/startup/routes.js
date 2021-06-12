@@ -4,9 +4,9 @@ const morgan = require('morgan');
 
 const user = require("../routes/user");
 const admin = require("../routes/admin");
+const fooditem = require("../routes/fooditem");
 const customer = require("../routes/customer");
 const category = require("../routes/category");
-const fooditem = require("../routes/fooditem");
 const menu = require("../routes/menu");
 
 module.exports = function(app) { 

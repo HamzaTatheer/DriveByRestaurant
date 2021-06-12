@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require('joi');
-const {FoodItems, foodItemSchema} = require('./foodItem');
+const {FoodItems, foodItemSchema} = require('./fooditem');
 
 const orderSchema = new mongoose.Schema({
     user: {
@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema({
         default: Date.now,
     },
     fooditems: {
-        type: [FoodItems],
+        type: [foodItemSchema],
     },
     bill: {
         type: Number,
