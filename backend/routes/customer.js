@@ -3,7 +3,11 @@ const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 
+const auth = require('../middleware/auth');
 const { User, validateSignup } = require("../models/user");
+const {FoodItems, validateFoodItems, foodItemSchema} = require('../models/foodItem');
+const {Category, validateCategory} = require('../models/category');
+const {Order, validateOrder} = require('../models/order');
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
 router.post("/signup",upload.single('avatar'), async(req, res) => {
@@ -33,6 +37,41 @@ router.post("/signup",upload.single('avatar'), async(req, res) => {
 });
 
 //orderFood
+router.post("/orderFood", auth, async(req, res) => {
+    try {
+
+        if(req.user.role != 2) return res.status(403).send("no privelage to access resource");
+
+        const { error } = validateOrder(req.body);//2 is customer role 
+
+        if (error) return res.status(400).send(error.details[0].message);
+
+        let user = await User.findById(req.body.user);
+        if(!user)  return res.status(400).send("No customer with this ID.");
+
+        req.body.foodItems.forEach(async(item) => {
+            let food = await FoodItems.findById(item);
+            if (!food)  return res.status(400).send("No food item with this ID.");
+        });
+
+        const order = new Order ({
+            user : {
+                _id : user._id,
+                name: user.name
+            },
+            bill : req.body.bill,
+            //foodItems : [req.body.foodItems]
+        });        
+
+        await order.save();
+
+        res.send(order);
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
 //getFoodOfTheDay
 //view active order details
 //view my order history

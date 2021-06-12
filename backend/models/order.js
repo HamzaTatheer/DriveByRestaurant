@@ -1,11 +1,18 @@
 const mongoose = require("mongoose");
 const Joi = require('joi');
-const {FoodItems} = require('./foodItem');
+const {FoodItems, foodItemSchema} = require('./foodItem');
 
-const orderSchema = new mongoose.Schema ({
+const orderSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "userSchema"
+        type: new mongoose.Schema({
+            name : {
+                type : String,
+                required : true,
+                minlength : 4,
+                maxlength : 100 
+            },
+        }),
+        required: true
     },
     date: {
         type: Date,
@@ -22,8 +29,7 @@ const orderSchema = new mongoose.Schema ({
     status: {
         type: String,
         enum: ['Queued', 'Cooking', 'Ready'],
-        required: true,
-        lowercase: true,
+        default : 'Queued',
         trim: true,
     },
 
@@ -32,13 +38,14 @@ const orderSchema = new mongoose.Schema ({
 const Order = mongoose.model('Order', orderSchema);
 
 function validateOrder(order){
-    const schema = {
+    const schema = Joi.object({
         user: Joi.objectId(),
         bill : Joi.number().min(0).required(),
-        status: Joi.string().required()
-    };
+        status: Joi.string(),
+        //foodItems : Joi.required()
+    });
 
-    return Joi.validate(order, schema);
+    return schema.validate(order);
 };
 
 exports.Order = Order;

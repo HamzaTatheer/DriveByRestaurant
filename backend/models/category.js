@@ -1,7 +1,5 @@
-const Joi = require("joi");
 const mongoose = require("mongoose");
-const config = require("config");
-const jwt = require("jsonwebtoken");
+const Joi = require('joi');
 
 const categorySchema = new mongoose.Schema ({
     name: {
@@ -14,5 +12,13 @@ const categorySchema = new mongoose.Schema ({
 
 const Category = mongoose.model('Category', categorySchema);
 
-exports.Category = Category;
-exports.categorySchema = categorySchema;
+function validateCategory(category){
+    const schema = Joi.object({
+        name: Joi.string().min(3).max(50).required(),
+    });
+
+    return schema.validate(category);
+};
+
+exports.Category = Category
+exports.validateCategory = validateCategory
