@@ -29,13 +29,12 @@ router.post('/', async (req, res) => {
     if(error)
         return res.status(400).send(error.details[0].message);
 
-    //const index = genres[]["id"];
     const category = new Category ({
         name : req.body.name
     });
 
     try {
-        const result = await category.save();
+        const result = await Category.save();
         console.log(result);
     }
     catch(ex) {
