@@ -49,12 +49,11 @@ function validateUserLogin(user) {
     return schema.validate(user);
 }
 
-function validateUserSignup(user,role) {
+function validateUserSignup(user) {
     const schema = Joi.object({
         name: Joi.string().min(5).max(50).required(),
         password: Joi.string().min(5).max(255).required(),
         phone: Joi.string().min(11).max(11).required(),
-        role: role,
     });
     return schema.validate(user);
 }

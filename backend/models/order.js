@@ -19,9 +19,8 @@ const orderSchema = new mongoose.Schema({
         required: true,
         default: Date.now,
     },
-    foodItems: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'foodItemSchema',
+    fooditems: {
+        type: [FoodItems],
     },
     bill: {
         type: Number,
@@ -49,5 +48,5 @@ function validateOrder(order){
     return schema.validate(order);
 };
 
-exports.Order = Order
-exports.validateOrder = validateOrder
+exports.Order = Order;
+exports.validateOrder = validateOrder;
