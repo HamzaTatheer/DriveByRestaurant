@@ -5,14 +5,17 @@ const bcrypt = require("bcrypt");
 const jwt_verify = require("../middleware/auth");
 const Joi = require("joi");
 
+const auth = require('../middleware/auth');
 const { User, validateSignup } = require("../models/user");
+const {FoodItems, validateFoodItems} = require('../models/foodItem');
+const {Category, validateCategory} = require('../models/category');
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
 
 router.post("/addCashier",[jwt_verify,upload.single('avatar')], async(req, res) => {
     try {
 
-        if(req.user.role != 0) return res.status(400).send("no privelage to access resource");
+        if(req.user.role != 0) return res.status(403).send("no privelage to access resource");
 
         const { error } = validateSignup(req.body,1);//1 is cashier role 
 
@@ -35,13 +38,15 @@ router.post("/addCashier",[jwt_verify,upload.single('avatar')], async(req, res) 
     }
     catch(ex) {
         console.log(ex.message);
-        res.status(500).send();
+        res.status(500).send(ex.message);
     }
 });
 
 
 router.post("/removeCashier",[jwt_verify,upload.single('avatar')], async(req, res) => {
     try {
+
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
 
         if(!req.body.id) res.status(400).send("No id in body to delete");
 
@@ -50,12 +55,130 @@ router.post("/removeCashier",[jwt_verify,upload.single('avatar')], async(req, re
     }
     catch(ex) {
         console.log(ex.message);
-        res.status(500).send();
+        res.status(500).send(ex.message);
     }
 });
 
 
 //add food item
+router.post('/addFoodItem', [auth, jwt_verify, upload.single('avatar')], async (req, res) => {
+    try{
+        const { error } = validateFoodItems(req.body);
+
+        if(error)
+            return res.status(400).send(error.details[0].message);
+
+        const category = await Category.findById( req.body.category );
+
+        if(!category)
+            return res.status(400).send("Category not found."); 
+
+        const foodItem = new FoodItems ({
+            name : req.body.name,
+            price : req.body.price,
+            category : {
+                name : category.name
+            },
+            ingredients : req.body.ingredients,
+            description : req.body.description
+        });
+        foodItem.avatar = req.file ? req.file.filename : null;
+
+        await foodItem.save();
+        
+        res.send(foodItem);
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
 //remove food item
+router.post("/removeFoodItem", auth, async(req, res) => {
+    try {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        if(!req.body.id) res.status(400).send("No Food Item with this id.");
+
+        FoodItems.findByIdAndDelete(req.body.id).then(doc => doc ? res.send(doc) : res.status(400).send("Food Item not found")).catch((err)=>res.status(500).send());
+
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//Get All foodItems
+router.get("/getAllFoodItems", auth, async(req, res) => {
+    try {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        FoodItems.find().then(doc => doc ? res.send(doc) : res.status(400).send("Food Item not found")).catch((err)=>res.status(500).send());
+
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//Add Category
+router.post('/addCategory', auth, async (req, res) => {
+    try {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        const { error } = validateCategory(req.body);
+
+        if(error)
+            return res.status(400).send(error.details[0].message);
+
+        //const index = genres[]["id"];
+        const category = new Category ({
+            name : req.body.name
+        });
+
+        const result = await category.save();
+        
+        res.send(category);
+    } 
+    catch(ex) 
+    {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+    
+});
+
+//Remove Category
+router.post("/removeCategory", auth, async(req, res) => {
+    try {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        if(!req.body.id) res.status(400).send("No Category with this id.");
+
+        Category.findByIdAndDelete(req.body.id).then(doc => doc ? res.send(doc) : res.status(400).send("Category not found")).catch((err)=>res.status(500).send());
+
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//Get All Categories
+router.get("/getAllCategories", auth, async(req, res) => {
+    try {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        Category.find().then(doc => doc ? res.send(doc) : res.status(400).send("Category not found")).catch((err)=>res.status(500).send());
+
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
 
 module.exports = router;

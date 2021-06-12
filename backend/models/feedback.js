@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Joi = require('joi');
 
+const {userSchema} = require('./user');
+
+
 const feedbackSchema = new mongoose.Schema ({
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,15 +30,15 @@ const feedbackSchema = new mongoose.Schema ({
 const Feedback = mongoose.model('Feedback', feedbackSchema);
 
 function validateFeedback(feedback){
-    const schema = {
+    const schema = Joi.object({
         user: Joi.objectId(),
         order: Joi.objectId(),
         rating : Joi.number().min(1).max(5).required(),
         message: Joi.string().required()
-    };
+    });
 
-    return Joi.validate(order, schema);
+    return schema.validate(order);
 };
 
-exports.Feedback = Feedback;
-exports.validateFeedback = validateFeedback;
+exports.Feedback = Feedback
+exports.validateFeedback = validateFeedback
