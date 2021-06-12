@@ -16,7 +16,6 @@ const feedbackSchema = new mongoose.Schema ({
     message: {
         type: String,
         maxlength: 280, // tweet length
-        lowercase: true,
         trim: true,
     },
     rating: {

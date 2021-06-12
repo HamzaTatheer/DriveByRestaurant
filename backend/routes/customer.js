@@ -8,6 +8,7 @@ const { User, validateSignup } = require("../models/user");
 const {FoodItem} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
 const {Order, validateOrder} = require('../models/order');
+const { Feedback, validateFeedback } = require("../models/feedback");
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
 //Signup
@@ -34,6 +35,7 @@ router.post("/signup",upload.single('avatar'), async(req, res) => {
     }
     catch(ex) {
         console.log(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 
@@ -96,6 +98,7 @@ router.get("/activeOrders", auth, async(req, res) => {
     }
     catch(ex) {
         console.log(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 
@@ -117,6 +120,38 @@ router.get("/orderHistory", auth, async(req, res) => {
     }
     catch(ex) {
         console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//Post Feedback
+router.post('/giveFeedback', auth, async(req, res) => {
+
+    try 
+    {
+        let user = await User.findOne({ _id : req.user._id });
+        if (!user) return res.status(400).send("Customer does not exist"); 
+
+        let order = await Order.findById({ _id : req.body.order });
+        if(!order) return res.status(400).send("Order not found...");
+
+        if(order.status !== "Ready") return res.send("Order not Completed Yet...");
+
+        const feedback = new Feedback({
+            user : user._id,
+            order : order._id,
+            message : req.body.message,
+            rating : req.body.rating
+        });
+
+        await feedback.save();
+
+        res.send(feedback);
+    } 
+    catch (ex) 
+    {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 
