@@ -32,7 +32,6 @@ const orderSchema = new mongoose.Schema({
         default : 'Queued',
         trim: true,
     },
-
 });
 
 const Order = mongoose.model('Order', orderSchema);
@@ -42,7 +41,7 @@ function validateOrder(order){
         user: Joi.objectId(),
         bill : Joi.number().min(0).required(),
         status: Joi.string(),
-        //foodItems : Joi.required()
+        fooditems : Joi.array().items(Joi.objectId()).required()
     });
 
     return schema.validate(order);

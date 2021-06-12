@@ -8,6 +8,7 @@ const fooditem = require("../routes/fooditem");
 const customer = require("../routes/customer");
 const category = require("../routes/category");
 const menu = require("../routes/menu");
+const cashier = require('../routes/cashier');
 
 module.exports = function(app) { 
     app.use(express.json());
@@ -19,4 +20,5 @@ module.exports = function(app) {
     app.use("/api/fooditem", fooditem);
     app.use("/api/category", category);
     app.use("/api/admin", admin);
+    app.use("/api/cashier", cashier);
 }

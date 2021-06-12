@@ -43,16 +43,10 @@ router.post("/orderFood", auth, async(req, res) => {
         if(req.user.role != 2) return res.status(403).send("no privelage to access resource");
 
         const { error } = validateOrder(req.body);//2 is customer role 
-
         if (error) return res.status(400).send(error.details[0].message);
 
         let user = await User.findById(req.body.user);
         if(!user)  return res.status(400).send("No customer with this ID.");
-
-        req.body.foodItems.forEach(async(item) => {
-            let food = await FoodItem.findById(item);
-            if (!food)  return res.status(400).send("No food item with this ID.");
-        });
 
         const order = new Order ({
             user : {
@@ -60,8 +54,16 @@ router.post("/orderFood", auth, async(req, res) => {
                 name: user.name
             },
             bill : req.body.bill,
-            //foodItems : [req.body.foodItems]
-        });        
+            //fooditems : req.body.fooditems
+        }); 
+
+        for (let index = 0; index < req.body.fooditems.length; index++) {
+            let food = await FoodItem.freqindById(req.body.fooditems[index]);
+                if (!food)  return res.status(400).send("No food item with this ID.");
+                console.log(food);
+            order.fooditems.push(food);
+            element = req.body.fooditems[index];
+        }
 
         await order.save();
 
@@ -75,22 +77,23 @@ router.post("/orderFood", auth, async(req, res) => {
 //getFoodOfTheDay
 //view active order details
 //view my order history
-router.get("/orderHistory",async(req, res) => {
+router.get("/orderHistory", auth, async(req, res) => {
     try {
 
         let user = await User.findOne({phone: req.body.phone});
-        if (!user_) { return res.status(400).send("Customer does not exist"); }
+        if (!user) { return res.status(400).send("Customer does not exist"); }
 
-        const orders = await Order.find({_id : user._id })
+        console.log(user._id);
+        const orders = await Order.find({ _id : user._id })
             .sort({ date : 1 })
             .lean();
     
+        console.log(orders);
         res.send(orders);
     }
     catch(ex) {
         console.log(ex.message);
     }
 });
-
 
 module.exports = router;
