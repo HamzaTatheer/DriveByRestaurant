@@ -42,14 +42,61 @@ router.get("/getAllFoodItems", auth, async(req, res) => {
     }
 });
 //change profile details
-//get User details by id. Besides password ofcourse
+router.post('/changePassword', auth, async(req, res) => {
+    try 
+    {
+        let user = await User.findOne({phone : req.body.phone})
+            .select('name phone avatar role password')
+            .lean();
 
+        if(!user) return res.status(400).send('Phone number incorrect');
+
+        validPassword = await bcrypt.compare(req.body.oldPassword, user.password);
+        if (!validPassword) return res.status(400).send("Invalid phone number or password");
+
+        if(req.body.newPassword !== req.body.confirmPassword) return res.status(300).send('New Passwords donot match...');
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(req.body.newPassword, salt);
+        console.log(user);
+
+        const newUser = await User.findByIdAndUpdate(user._id, { password : user.password},{ new : true });
+
+        res.send(newUser);
+        //const token = user.generateAuthToken();
+        //res.header("access_token", token).send(_.pick(newUser,["name", "_id", "role", "avatar"]));
+        } 
+    catch (ex) 
+    {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+})
+
+//get User details by id. Besides password ofcourse
+router.get('/userDetails', async(req, res) => {
+    try 
+    {
+        const user = await User.findById(req.body._id)
+            .select('-password')
+            .lean();
+
+        if(!user) return res.status(400).send('User not found at this id...');
+
+        res.send(user);
+        } 
+    catch (ex) 
+    {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+})
 
 //get all food categories
 router.get("/getAllCategories", auth, async(req, res) => {
     try {
 
-        Category.find().then(doc => doc ? res.send(doc) : res.status(400).send("Category not found")).catch((err)=>res.status(500).send());
+        await Category.find().then(doc => doc ? res.send(doc) : res.status(400).send("Category not found")).catch((err)=>res.status(500).send());
 
     }
     catch(ex) {

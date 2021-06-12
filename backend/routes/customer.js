@@ -10,6 +10,7 @@ const {Category, validateCategory} = require('../models/category');
 const {Order, validateOrder} = require('../models/order');
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
+//Signup
 router.post("/signup",upload.single('avatar'), async(req, res) => {
     try {
 
@@ -58,7 +59,7 @@ router.post("/orderFood", auth, async(req, res) => {
         }); 
 
         for (let index = 0; index < req.body.fooditems.length; index++) {
-            let food = await FoodItem.freqindById(req.body.fooditems[index]);
+            let food = await FoodItem.findById(req.body.fooditems[index]);
                 if (!food)  return res.status(400).send("No food item with this ID.");
                 console.log(food);
             order.fooditems.push(food);
