@@ -9,6 +9,7 @@ const auth = require('../middleware/auth');
 const { User, validateSignup } = require("../models/user");
 const {FoodItem, validateFoodItems} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
+const { Feedback } = require("../models/feedback");
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
 
@@ -173,6 +174,20 @@ router.get("/getAllCategories", auth, async(req, res) => {
         if(req.user.role != 0) return res.status(403).send("Access Denied");
 
         Category.find().then(doc => doc ? res.send(doc) : res.status(400).send("Category not found")).catch((err)=>res.status(500).send());
+
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//Get All Feedbacks
+router.get("/getAllFeedbacks", auth, async(req, res) => {
+    try {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        Feedback.find().then(doc => doc ? res.send(doc) : res.status(400).send("Feedback not found")).catch((err)=>res.status(500).send());
 
     }
     catch(ex) {
