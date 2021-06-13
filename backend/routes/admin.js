@@ -11,6 +11,7 @@ const {FoodItem, validateFoodItems} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
 const { Feedback } = require("../models/feedback");
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
+const uploadfoodItem = require("../middleware/multer")("public/uploads/foodItem_pictures/");
 
 
 router.post("/addCashier",[jwt_verify,upload.single('avatar')], async(req, res) => {
@@ -62,7 +63,7 @@ router.post("/removeCashier",[jwt_verify,upload.single('avatar')], async(req, re
 
 
 //add food item
-router.post('/addFoodItem', [auth, jwt_verify, upload.single('avatar')], async (req, res) => {
+router.post('/addFoodItem', [auth, jwt_verify, uploadfoodItem.single('avatar')], async (req, res) => {
     try{
         const { error } = validateFoodItems(req.body);
 
