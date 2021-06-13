@@ -6,6 +6,7 @@ const {Order} = require("../models/order");
 
 
 //change food status
+
 router.post("/updateStatus", auth, async(req, res) => {
     try 
     {
@@ -31,7 +32,6 @@ router.post("/updateStatus", auth, async(req, res) => {
 router.get("/orderHistory", auth, async(req, res) => {
     try {
         if(req.user.role != 1) return res.status(403).send("Access Denied");
-
         const orders = await Order.find({})
             .sort({date : 1})
             .lean();

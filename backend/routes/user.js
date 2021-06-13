@@ -121,7 +121,6 @@ router.get('/userDetails', async(req, res) => {
 //get all food categories
 router.get("/getAllCategories", auth, async(req, res) => {
     try {
-
         await Category.find().then(doc => doc ? res.send(doc) : res.status(400).send("Category not found")).catch((err)=>res.status(500).send());
     }
     catch(ex) {
