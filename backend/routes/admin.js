@@ -2,17 +2,18 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
-const jwt_verify = require("../middleware/auth");
 const Joi = require("joi");
 
 const auth = require('../middleware/auth');
 const { User, validateSignup } = require("../models/user");
 const {FoodItem, validateFoodItems} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
+const { Feedback } = require("../models/feedback");
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
+const uploadfoodItem = require("../middleware/multer")("public/uploads/foodItem_pictures/");
 
 
-router.post("/addCashier",[jwt_verify,upload.single('avatar')], async(req, res) => {
+router.post("/addCashier",[auth, upload.single('avatar')], async(req, res) => {
     try {
 
         if(req.user.role != 0) return res.status(403).send("no privelage to access resource");
@@ -43,7 +44,7 @@ router.post("/addCashier",[jwt_verify,upload.single('avatar')], async(req, res) 
 });
 
 
-router.post("/removeCashier",[jwt_verify,upload.single('avatar')], async(req, res) => {
+router.post("/removeCashier",[auth, upload.single('avatar')], async(req, res) => {
     try {
 
         if(req.user.role != 0) return res.status(403).send("Access Denied");
@@ -61,7 +62,7 @@ router.post("/removeCashier",[jwt_verify,upload.single('avatar')], async(req, re
 
 
 //add food item
-router.post('/addFoodItem', [auth, jwt_verify, upload.single('avatar')], async (req, res) => {
+router.post('/addFoodItem', [auth, uploadfoodItem.single('avatar')], async (req, res) => {
     try{
         const { error } = validateFoodItems(req.body);
 
@@ -176,6 +177,42 @@ router.get("/getAllCategories", auth, async(req, res) => {
 
     }
     catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//Get All Feedbacks
+router.get("/getAllFeedbacks", auth, async(req, res) => {
+    try {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        Feedback.find().then(doc => doc ? res.send(doc) : res.status(400).send("Feedback not found")).catch((err)=>res.status(500).send());
+
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//change food status
+router.post("/updateStatus", auth, async(req, res) => {
+    try 
+    {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        let order = await Order.findById({ _id : req.body.orderId });
+        if(!order) return res.status(400).send("Order not found...");
+        console.log(order);
+
+        order.status = req.body.status;
+
+        await order.save();
+
+        res.send(order);
+    }
+    catch (ex) {
         console.log(ex.message);
         res.status(500).send(ex.message);
     }

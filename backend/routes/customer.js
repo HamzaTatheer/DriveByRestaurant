@@ -8,8 +8,10 @@ const { User, validateSignup } = require("../models/user");
 const {FoodItem} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
 const {Order, validateOrder} = require('../models/order');
+const { Feedback, validateFeedback } = require("../models/feedback");
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
+//Signup
 router.post("/signup",upload.single('avatar'), async(req, res) => {
     try {
 
@@ -33,6 +35,7 @@ router.post("/signup",upload.single('avatar'), async(req, res) => {
     }
     catch(ex) {
         console.log(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 
@@ -43,7 +46,6 @@ router.post("/orderFood", auth, async(req, res) => {
         if(req.user.role != 2) return res.status(403).send("no privelage to access resource");
 
         const { error } = validateOrder(req.body);//2 is customer role 
-
         if (error) return res.status(400).send(error.details[0].message);
 
         let user = await User.findById(req.body.user);
@@ -55,14 +57,17 @@ router.post("/orderFood", auth, async(req, res) => {
                 name: user.name
             },
             bill : req.body.bill,
-            //foodItems : [req.body.foodItems]
+
+            //fooditems : req.body.fooditems
         }); 
 
-        req.body.foodItems.forEach(async(item) => {
-            let food = await FoodItem.findById(item);
-            if (!food)  return res.status(400).send("No food item with this ID.");
+        for (let index = 0; index < req.body.fooditems.length; index++) {
+            let food = await FoodItem.findById(req.body.fooditems[index]);
+                if (!food)  return res.status(400).send("No food item with this ID.");
+                console.log(food);
             order.fooditems.push(food);
-        });
+            element = req.body.fooditems[index];
+        }
 
         await order.save();
 
@@ -74,37 +79,79 @@ router.post("/orderFood", auth, async(req, res) => {
     }
 });
 //getFoodOfTheDay
+
+
 //view active order details
-//view my order history
-router.get("/orderHistory", auth, async(req, res) => {
+router.get("/activeOrders", auth, async(req, res) => {
     try {
 
-        let user = await User.findOne({phone: req.body.phone});
-        if (!user_) { return res.status(400).send("Customer does not exist"); }
+        let currentUser = await User.findOne({phone: req.body.phone});
+        if (!currentUser) { return res.status(400).send("Customer does not exist"); }
 
-        const orders = await Order.find({_id : user._id })
-            .sort({ date : 1 })
-            .lean();
-    
-        res.send(orders);
-    }
-    catch(ex) {
-        console.log(ex.message);
-    }
-});
-
-router.get("/viewActiveOrders", auth, async (req, res) => {
-    try {
-        let currentUser = req.user;
+        console.log(currentUser._id);
 
         const orders = await Order.find({ user: {_id: currentUser._id, name: currentUser.name}, status : ["Queued", "Cooking"] })
             .sort({ date : 1 })
             .lean();
-
+    
+        console.log(orders);
         res.send(orders);
     }
-    catch (ex) {
+    catch(ex) {
         console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//view my order history
+router.get("/orderHistory", auth, async(req, res) => {
+    try {
+        let currentUser = await User.findOne({phone: req.body.phone});
+        if (!currentUser) { return res.status(400).send("Customer does not exist"); }
+
+        console.log(currentUser._id);
+
+        const orders = await Order.find({ user: {_id: currentUser._id, name: currentUser.name} })
+            .sort({ date : 1 })
+            .lean();
+    
+        console.log(orders);
+        res.send(orders);
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
+//Post Feedback
+router.post('/giveFeedback', auth, async(req, res) => {
+
+    try 
+    {
+        let user = await User.findOne({ _id : req.user._id });
+        if (!user) return res.status(400).send("Customer does not exist"); 
+
+        let order = await Order.findById({ _id : req.body.order });
+        if(!order) return res.status(400).send("Order not found...");
+
+        if(order.status !== "Ready") return res.send("Order not Completed Yet...");
+
+        const feedback = new Feedback({
+            user : user._id,
+            order : order._id,
+            message : req.body.message,
+            rating : req.body.rating
+        });
+
+        await feedback.save();
+
+        res.send(feedback);
+    } 
+    catch (ex) 
+    {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 

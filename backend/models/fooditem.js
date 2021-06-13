@@ -38,7 +38,9 @@ const foodItemSchema = new mongoose.Schema ({
     },
 });
 
-const FoodItem = mongoose.model('Fooditems', foodItemSchema);
+
+const FoodItem = mongoose.model('FoodItems', foodItemSchema);
+
 
 function validateFoodItems(category){
     const schema = Joi.object({
@@ -47,6 +49,9 @@ function validateFoodItems(category){
         category : Joi.objectId(),
         ingredients : Joi.required(),
         description : Joi.string().required(),
+
+        
+
     });
 
     return schema.validate(category);
