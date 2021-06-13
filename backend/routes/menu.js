@@ -45,8 +45,9 @@ router.get("/orderOfTheDay", async(req, res) => {
 		});
 		
 		let highestOrderedItem = Object.keys(count).reduce((a, b) => count[a] > count[b] ? a : b);
+		let foodObject = await FoodItem.find({name: highestOrderedItem});
 
-		res.send(highestOrderedItem);
+		res.send(foodObject);
 	} 
 	catch (ex) {
 		console.log(ex.message);

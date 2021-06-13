@@ -38,7 +38,7 @@ const foodItemSchema = new mongoose.Schema ({
     },
 });
 
-const FoodItem = mongoose.model('FoodItems', foodItemSchema);
+const FoodItem = mongoose.model('Fooditems', foodItemSchema);
 
 function validateFoodItems(category){
     const schema = Joi.object({
