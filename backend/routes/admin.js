@@ -196,4 +196,26 @@ router.get("/getAllFeedbacks", auth, async(req, res) => {
     }
 });
 
+//change food status
+router.post("/updateStatus", auth, async(req, res) => {
+    try 
+    {
+        if(req.user.role != 0) return res.status(403).send("Access Denied");
+
+        let order = await Order.findById({ _id : req.body.orderId });
+        if(!order) return res.status(400).send("Order not found...");
+        console.log(order);
+
+        order.status = req.body.status;
+
+        await order.save();
+
+        res.send(order);
+    }
+    catch (ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
+
 module.exports = router;
