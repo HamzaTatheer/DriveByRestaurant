@@ -47,6 +47,7 @@ function validateFoodItems(category){
         category : Joi.objectId(),
         ingredients : Joi.required(),
         description : Joi.string().required(),
+        
     });
 
     return schema.validate(category);

@@ -71,7 +71,33 @@ router.post('/changePassword', auth, async(req, res) => {
         console.log(ex.message);
         res.status(500).send(ex.message);
     }
-})
+});
+
+//change profile details
+router.post('/changeUserName', auth, async(req, res) => {
+    try 
+    {
+        let user = await User.findOne({phone : req.body.phone})
+            .select('name phone avatar role password')
+            .lean();
+
+        if(!user) return res.status(400).send('Phone number incorrect');
+
+        validPassword = await bcrypt.compare(req.body.password, user.password);
+        if (!validPassword) return res.status(400).send("Invalid phone number or password");
+
+        const newUser = await User.findByIdAndUpdate(user._id, { name : req.body.name},{ new : true });
+
+        res.send(newUser);
+        //const token = user.generateAuthToken();
+        //res.header("access_token", token).send(_.pick(newUser,["name", "_id", "role", "avatar"]));
+        } 
+    catch (ex) 
+    {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+});
 
 //get User details by id. Besides password ofcourse
 router.get('/userDetails', async(req, res) => {
