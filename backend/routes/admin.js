@@ -10,7 +10,7 @@ const {FoodItem, validateFoodItems} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
 const { Feedback } = require("../models/feedback");
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
-const uploadfoodItem = require("../middleware/multer")("public/uploads/foodItem_pictures/");
+const uploadfoodItem = require("../middleware/multer")("public/uploads/food_pictures/");
 
 
 router.post("/addCashier",[auth, upload.single('avatar')], async(req, res) => {
