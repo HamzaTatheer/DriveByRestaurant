@@ -57,6 +57,7 @@ router.post("/orderFood", auth, async(req, res) => {
                 name: user.name
             },
             bill : req.body.bill,
+
             //fooditems : req.body.fooditems
         }); 
 
@@ -105,7 +106,6 @@ router.get("/activeOrders", auth, async(req, res) => {
 //view my order history
 router.get("/orderHistory", auth, async(req, res) => {
     try {
-
         let currentUser = await User.findOne({phone: req.body.phone});
         if (!currentUser) { return res.status(400).send("Customer does not exist"); }
 

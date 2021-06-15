@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
-const jwt_verify = require("../middleware/auth");
 const Joi = require("joi");
 
 const auth = require('../middleware/auth');
@@ -11,11 +10,10 @@ const {FoodItem, validateFoodItems} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
 const { Feedback } = require("../models/feedback");
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
-const upload2 = require("../middleware/multer")("public/uploads/food_pictures/");
+const uploadfoodItem = require("../middleware/multer")("public/uploads/foodItem_pictures/");
 
 
-
-router.post("/addCashier",[jwt_verify,upload.single('avatar')], async(req, res) => {
+router.post("/addCashier",[auth, upload.single('avatar')], async(req, res) => {
     try {
 
         if(req.user.role != 0) return res.status(403).send("no privelage to access resource");
@@ -46,7 +44,7 @@ router.post("/addCashier",[jwt_verify,upload.single('avatar')], async(req, res) 
 });
 
 
-router.post("/removeCashier",[jwt_verify,upload.single('avatar')], async(req, res) => {
+router.post("/removeCashier",[auth, upload.single('avatar')], async(req, res) => {
     try {
 
         if(req.user.role != 0) return res.status(403).send("Access Denied");
@@ -64,7 +62,7 @@ router.post("/removeCashier",[jwt_verify,upload.single('avatar')], async(req, re
 
 
 //add food item
-router.post('/addFoodItem', [auth, jwt_verify, upload2.single('avatar')], async (req, res) => {
+router.post('/addFoodItem', [auth, uploadfoodItem.single('avatar')], async (req, res) => {
     try{
         const { error } = validateFoodItems(req.body);
 
