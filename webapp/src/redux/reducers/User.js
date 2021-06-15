@@ -8,23 +8,23 @@ const authReducer = (state = null, action) => {
 		case SIGN_IN:{
 			console.log("REDUCER");
 			let userDetails = action.payload;
-			localStorage.setItem("se-user",JSON.stringify(userDetails));
+			localStorage.setItem("se_user",JSON.stringify(userDetails));
 			return userDetails;
 		}
 
 		case SIGN_UP:{
 			let userDetails = action.payload;
-			localStorage.setItem("se-user",JSON.stringify(userDetails));
+			localStorage.setItem("se_user",JSON.stringify(userDetails));
 			return userDetails;
 		}
 
 		case SIGN_OUT:
 			console.log("HELLO");
-			localStorage.removeItem("se-user");
+			localStorage.removeItem("se_user");
 			return null;
 		
 		default:{
-			return JSON.parse(localStorage.getItem("se-user"));
+			return JSON.parse(localStorage.getItem("se_user"));
 		}
 	}
 };

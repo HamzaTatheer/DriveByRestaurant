@@ -11,7 +11,7 @@ export default function MenuBar(props){
 
     return (
         <>
-        <Appbar>
+        <Appbar style={props.fixed ? {position:"fixed",width:"100%",zIndex:"1000"}:{}}>
 
         <div className="home-desktop-menu">
                 <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:"5px",paddingLeft:"10px",paddingRight:"10px"}}>

@@ -3,7 +3,7 @@ import Burger from "../../assets/customer/burger.png";
 import {useDispatch} from "react-redux";
 import {addToCart,removeFromCart} from "../../redux/actions/cartAction";
 
-export default function FoodCard({id,name,description,price,category}){
+export default function FoodCard({id,picture,name,description,price,category}){
 
     let dispatch = useDispatch();
 
@@ -11,7 +11,7 @@ export default function FoodCard({id,name,description,price,category}){
         <div class="card">
         <div className="d-flex justify-content-center">
             <div style={{height:"250px",width:"100%",background:"#FFF9F9"}} className="d-flex justify-content-center align-items-center">
-                <img src={Burger} width="250px"/>
+                <img src={picture} width="250px"/>
             </div>
         </div>
 

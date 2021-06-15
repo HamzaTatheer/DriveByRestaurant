@@ -24,9 +24,9 @@ function App() {
 					<Route exact path="/" component={Home} />
 					<Route exact path="/login" component={Login} />
           			<Route exact path="/signup" component={SignUp} />
-					<ProtectedRoute privelage="admin" path="/admin" component={AdminPage}/>
-					<ProtectedRoute privelage="customer" path="/customer" component={CustomerPage}/>
-					<ProtectedRoute privelage="delivery" path="/delivery" component={DeliveryPage}/>
+					<ProtectedRoute privelage={0} path="/admin" component={AdminPage}/>
+					<ProtectedRoute privelage={1} path="/cashier" component={DeliveryPage}/>
+					<ProtectedRoute privelage={2} path="/customer" component={CustomerPage}/>
 				</Switch>
 			</Router>
 		</div>

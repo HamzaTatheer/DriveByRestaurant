@@ -15,34 +15,51 @@ import ChatBox from "../../components/Customer/ChatBox";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
+import {axios_authenticated as axios} from "../../axios/axios-config";
+
 
 function MenuScreen(props) {
-  let foodItems = [
-    {
-      id: 1,
-      name: "zinger burger",
-      category: "burger",
-      price: 600,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
-    },
-    {
-      id: 2,
-      name: "wehshi burger",
-      category: "burger",
-      price: 600,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
-    },
-    {
-      id: 3,
-      name: "coke",
-      category: "drink",
-      price: 90,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
-    },
-  ];
+
+  let [foodItems,setFoodItems] = useState([]);
+
+  useEffect(()=>{
+    axios.get("api/menu/menu").then((res)=>{
+      console.log(res);
+      let data = res.data;
+      setFoodItems(data.map((d)=>{
+        return {id:d._id, picture:d.avatar,name:d.name,category:d.category,price:d.price,description:d.description}
+      }))
+    }).catch((err)=>{
+      console.log(err);
+    });
+  },[])
+
+  // let foodItems = [
+  //   {
+  //     id: 1,
+  //     name: "zinger burger",
+  //     category: "burger",
+  //     price: 600,
+  //     description:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "wehshi burger",
+  //     category: "burger",
+  //     price: 600,
+  //     description:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "coke",
+  //     category: "drink",
+  //     price: 90,
+  //     description:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
+  //   },
+  // ];
 
   let [search, setSearch] = useState("");
   let [category, changeCategory] = useState("All");
@@ -103,10 +120,11 @@ function MenuScreen(props) {
           <div style={{ marginTop: "20px" }}>
             <div class="row row-cols-12">
               {filteredListBySearch(filteredListByCategory(foodItems)).map(
-                ({ id, name, description, category, price }) => (
+                ({ id,picture, name, description, category, price }) => (
                   <div class="col mb-4">
                     <FoodCard
                       id={id}
+                      picture={`http://localhost:3004/public/uploads/food_pictures/${picture}`}
                       name={name}
                       description={description}
                       category={category}
@@ -134,7 +152,10 @@ function Checkout(props) {
       alert("No Items in Cart. Select from Menu");
       return;
     }
-    props.history.push("/customer/status");
+
+    console.log(cart_items);
+
+    //props.history.push("/customer/status");
   };
 
   return (
@@ -167,7 +188,7 @@ function Checkout(props) {
           <div className="col-xs-0 col-md-2" />
           <div className="col-xs-12 col-md-8">
             {cart_items.map((obj) => (
-              <CheckoutItem id={obj.id} quantity={obj.quantity} />
+              <CheckoutItem key={obj.id} id={obj.id} quantity={obj.quantity} />
             ))}
             <div className="w-100 d-flex justify-content-center">
               <Button onClick={() => confirmOrder()} label="Confirm Order" />

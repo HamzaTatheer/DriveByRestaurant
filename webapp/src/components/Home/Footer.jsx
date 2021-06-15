@@ -2,6 +2,10 @@ import React from "react";
 
 export default function Footer(){
     return (
-        <h1>Footer Component</h1>
+        <div className="container d-flex">
+            <div className="p-3">Facebook</div>
+            <div className="p-3">Google</div>
+            <div className="p-3">Youtube</div>
+        </div>
     );
 }

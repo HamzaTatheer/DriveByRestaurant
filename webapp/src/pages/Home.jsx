@@ -6,23 +6,32 @@ import Slider from "../components/Home/Slider";
 import Features from "../components/Home/Features";
 import OrderNow from "../components/Home/OrderNow";
 import Footer from "../components/Home/Footer";
+import {useHistory} from "react-router-dom";
 
-export default function Home(){
+export default function Home(props){
+    const history = useHistory();
+
     return (
         <>
-        <MenuBar>
-            <Button menuButton label="Home"/>
-            <Button menuButton label="Features"/>
-            <Button menuButton label="Contact Us"/>
+        <MenuBar fixed>
+
+            <Button menuButton label="Home" onClick={()=>window.location.href="/#home"}/>
+            <Button menuButton label="Features" onClick={()=>window.location.href="/#features"}/>
+            <Button menuButton label="Contact Us" onClick={()=>window.location.href="/#contactus"}/>
         </MenuBar>
 
 
-        <Welcome/>
-        <Slider/>
-        <Features/>
-        <OrderNow/>
-        <Footer/>
-
+        <div id="home">
+            <Welcome/>
+        </div>
+            <Slider/>
+        <div id="features">
+            <Features/>
+        </div>
+            <OrderNow/>
+        <div id="contactus">
+            <Footer/>
+        </div>
         </>
     );
 }

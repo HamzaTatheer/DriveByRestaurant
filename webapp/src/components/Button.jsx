@@ -47,46 +47,6 @@ export default function Button(props) {
     );
   }
 
-  let mystyle = {
-    padding: "10px 130px 10px 130px",
-    fontFamily: "Arial",
-    border: "none",
-    borderRadius: "25px",
-    textAlign: "centre",
-    fontSize: "1em",
-  };
-
-  if (props.redButton == true) {
-    mystyle.color = "white";
-    mystyle.backgroundColor = "#E35A5A";
-  } else if (props.whiteButton == true) {
-    mystyle.color = "black";
-    mystyle.backgroundColor = "#FFF9F9";
-  } else if (props.blackButton == true) {
-    mystyle.color = "white";
-    mystyle.backgroundColor = "black";
-  }
-  let disabled = false;
-  if (props.disabled) {
-    disabled = true;
-    mystyle.backgroundColor = "black";
-  }
-  console.log(mystyle);
-  console.log(props.mystyle);
-  mystyle = { ...mystyle, ...props.mystyle };
-  console.log("adderd", mystyle);
-  return (
-    <div className="myButton">
-      <button
-        onClick={props.onClick}
-        disabled={disabled}
-        style={mystyle}
-        type="button"
-      >
-        {props.label}
-      </button>
-    </div>
-  );
   if (props.simpleButton == true) {
     return (
       <div>
@@ -104,4 +64,45 @@ export default function Button(props) {
       </div>
     );
   }
+
+  let mystyle = {
+    minWidth:"265px",
+    minHeight:"45px",
+    fontFamily: "Arial",
+    border: "none",
+    borderRadius: "25px",
+    textAlign: "centre",
+    fontSize: "1em",
+  };
+
+  if (props.redButton == true) {
+    mystyle.color = "white";
+    mystyle.backgroundColor = "#E35A5A";
+  } else if (props.whiteButton == true) {
+    mystyle.color = "black";
+    mystyle.backgroundColor = "#FFF9F9";
+  } else if (props.blackButton == true) {
+    mystyle.color = "white";
+    mystyle.backgroundColor = "black";
+  }
+
+  let disabled = false;
+  if (props.disabled) {
+    disabled = true;
+    mystyle.backgroundColor = "black";
+  }
+
+  return (
+    <div className="myButton">
+      <button
+        onClick={props.onClick}
+        disabled={disabled}
+        style={mystyle}
+        type="button"
+      >
+        {props.label}
+      </button>
+    </div>
+  );
+
 }

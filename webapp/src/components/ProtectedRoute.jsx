@@ -14,8 +14,26 @@ const ProtectedRoute = ({privelage, component: Component, ...rest }) => {
         <>
             <Route {...rest} render={
                 props => {
-                    if (localStorage.getItem("se-user") != null && user.role == "customer") {
+
+
+                    if (localStorage.getItem("se_user") != null) {
+                        const data = JSON.parse(localStorage.getItem("se_user"));
+                        let role = data.role;
+
+                        if(role===privelage)
                         return <Component {...props} />
+                        else {
+                            alert("You dont have the privelages to access this page");
+                            return <Redirect to={
+                                {
+                                    pathname: "/",
+                                    state: {
+                                        from: props.location
+                                    }
+                                }
+                            } />
+                        }
+
                     }
                     else {
                         return <Redirect to={
