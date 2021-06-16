@@ -23,12 +23,13 @@ function Login(props) {
       password:password
     }).then(({data})=>{
         console.log(data);
+        let id = data.user._id;
         let pfp = data.user.avatar;
         let name = data.user.name;
         let role = data.user.role;
         let token = data.access_token;
 
-        dispatch(signIn(pfp, name, phone, role, token));
+        dispatch(signIn(id,pfp, name, phone, role, token));
 
 
         if (role === 0) {
