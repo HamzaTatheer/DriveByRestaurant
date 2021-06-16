@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import {axios_authenticated as axios} from "../../axios/axios-config";
+import baseUrl from "../../utilities/baseUrl";
 
 
 function MenuScreen(props) {
@@ -124,7 +125,7 @@ function MenuScreen(props) {
                   <div class="col mb-4">
                     <FoodCard
                       id={id}
-                      picture={`http://localhost:3004/public/uploads/food_pictures/${picture}`}
+                      picture={`${baseUrl}/public/uploads/food_pictures/${picture}`}
                       name={name}
                       description={description}
                       category={category}
@@ -155,6 +156,22 @@ function Checkout(props) {
 
     console.log(cart_items);
 
+
+    let req_body = [];
+
+    for(let i=0;i<cart_items.length;i++)
+    while(cart_items[i].quantity > 0){
+      req_body.push(cart_items[i].id);
+      cart_items[i].quantity--;
+    }
+
+    console.log(req_body);
+    axios.post("/api/customer/orderFood",req_body).then((res)=>{
+      alert("Order placed Succesfuly");
+      history.push("/customer/status");
+    }).catch((res)=>{
+      console.log(res.body);
+    })
     //props.history.push("/customer/status");
   };
 

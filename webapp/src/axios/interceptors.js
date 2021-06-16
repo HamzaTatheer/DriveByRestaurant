@@ -1,5 +1,6 @@
 import {instance} from "./axios-config";
 
+
 export const addInterceptors = (instance)=>{
 	instance.interceptors.request.use(addAccessToken,handleRequestError);
 	instance.interceptors.response.use(handleResponseOK,handleResponseError);
@@ -8,7 +9,7 @@ export const addInterceptors = (instance)=>{
 
 export const addAccessToken = (config) => {
 	const data = JSON.parse(localStorage.getItem("se_user"));
-	let accessToken = data.accessToken;
+	let accessToken = data.token;
 	return { ...config, headers: { "access_token": `${accessToken}` } };
 };
 

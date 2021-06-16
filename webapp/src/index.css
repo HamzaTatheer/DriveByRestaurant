@@ -51,13 +51,13 @@ a:hover {
 /* Uses vh and vm with calc */
 @media screen and (min-width: 25em) {
   html {
-    font-size: 8px;
+    font-size: 15px;
   }
 }
 
 @media screen and (min-width: 32em) {
   html {
-    font-size: 12px;
+    font-size: 16px;
   }
 }
 
