@@ -13,7 +13,7 @@ import CheckoutItem from "../../components/CheckOutItem";
 import WaitingAnimation from "../../components/Customer/WaitingAnimation";
 import ChatBox from "../../components/Customer/ChatBox";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory,useLocation } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import {axios_authenticated as axios} from "../../axios/axios-config";
 import baseUrl from "../../utilities/baseUrl";
@@ -168,7 +168,7 @@ function Checkout(props) {
     console.log(req_body);
     axios.post("/api/customer/orderFood",req_body).then((res)=>{
       alert("Order placed Succesfuly");
-      history.push("/customer/status");
+      history.push({pathname:"/customer/status",state: { id: res.data._id }});
     }).catch((res)=>{
       console.log(res.body);
     })
@@ -219,22 +219,35 @@ function Checkout(props) {
 }
 
 function Status(props) {
+  
+  let history = useHistory();
+  const location = useLocation();
+  let [orderId,setOrderId] = useState(null);
+
+  useEffect(() => {
+      setOrderId(location.state.id);
+  }, [location,setOrderId]);
+
+
+  
+  
   //socket.on("order-status-change") {change status}
   //side case. if status is Done
   //go to next page i.e order history
 
-  let history = useHistory();
-  let [status, setStatus] = useState("pending");
 
-  setTimeout(() => {
-    setStatus("cooking");
-    setTimeout(() => {
-      setStatus("done");
-      setTimeout(() => {
-        history.push("/customer/orderHistory");
-      }, 1000);
-    }, 3000);
-  }, 2000);
+  let [status, setStatus] = useState("Queued");
+  
+
+  // setTimeout(() => {
+  //   setStatus("cooking");
+  //   setTimeout(() => {
+  //     setStatus("done");
+  //     setTimeout(() => {
+  //       history.push("/customer/orderHistory");
+  //     }, 1000);
+  //   }, 3000);
+  // }, 2000);
 
   return (
     <>
@@ -249,12 +262,12 @@ function Status(props) {
         <div className="col-xs-0 col-md-2" />
         <div className="col-xs-12 col-md-8 d-flex flex-column align-items-center">
           <h1 className="text-center" style={{ marginTop: "60px" }}>
-            Order# 3
+            Order Id: {orderId}
           </h1>
           <WaitingAnimation />
-          <StatusCard done={status == "pending"} label="Pending" />
-          <StatusCard done={status == "cooking"} label="Cooking" />
-          <StatusCard done={status == "done"} label="Done" />
+          <StatusCard done={status == "Queued"} label="Queued" />
+          <StatusCard done={status == "Cooking"} label="Cooking" />
+          <StatusCard done={status == "Ready"} label="Ready" />
         </div>
         <div className="col-xs-0 col-md-2" />
       </div>
@@ -262,7 +275,10 @@ function Status(props) {
   );
 }
 
+
 function Chat(props) {
+
+
   return (
     <>
       <ProfileHeader>

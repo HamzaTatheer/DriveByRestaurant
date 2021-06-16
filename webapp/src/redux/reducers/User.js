@@ -1,4 +1,4 @@
-import {SIGN_IN,SIGN_UP,SIGN_OUT} from "../actions/authAction";
+import {SIGN_IN,SIGN_UP,SIGN_OUT,UPDATE} from "../actions/authAction";
 
 const authReducer = (state = null, action) => {
 	console.log(action);
@@ -6,10 +6,15 @@ const authReducer = (state = null, action) => {
 	switch(action.type){
 
 		case SIGN_IN:{
-			console.log("REDUCER");
 			let userDetails = action.payload;
 			localStorage.setItem("se_user",JSON.stringify(userDetails));
 			return userDetails;
+		}
+
+		case UPDATE:{
+			console.log("DONE");
+			console.log({...state,...action.payload});
+			return {...state, ...action.payload};
 		}
 
 		case SIGN_UP:{

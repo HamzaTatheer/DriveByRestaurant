@@ -6,7 +6,7 @@ require('./startup/dotenv')();
 require('./startup/publicFolders')(app);
 require('./startup/cors')(app);
 require('./startup/routes')(app);
-//require('./startup/io')(app);
+require('./startup/io')(app);
 require('./startup/logging')();
 require('./startup/db')();
 require('./startup/validation')();
