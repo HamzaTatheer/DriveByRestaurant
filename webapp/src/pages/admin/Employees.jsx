@@ -1,32 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Button from "../../components/Button";
 import ProfileHeader from "../../components/ProfileHeader";
 import Burger from "../../../src/assets/customer/salad.png";
 import PopUpEmployees from "./PopUpEmployees";
+import { axios_authenticated as axios } from "../../axios/axios-config";
 function Employees(props) {
-  let [employees, setEmployees] = useState([
-    {
-      name: "Abdullah",
-      cnic: "12321435",
-      image: Burger,
-    },
-    {
-      name: "Abdullah",
-      cnic: "12314235",
-      image: Burger,
-    },
-    {
-      name: "Abdullah",
-      cnic: "13214235",
-      image: Burger,
-    },
-    {
-      name: "Abdullah",
-      cnic: "23214235",
-      image: Burger,
-    },
-  ]);
+  let [employees, setEmployees] = useState([]);
+  useEffect(() => {
+    axios
+      .get("api/admin/getAllCashiers")
+      .then((res) => {
+        console.log(res);
+        let data = res.data;
+        setEmployees(
+          data.map((d) => {
+            return {
+              cnic: d._id,
+              image: d.avatar,
+              name: d.name,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -38,7 +39,8 @@ function Employees(props) {
   };
 
   function handleSave(item) {
-    let newitem = { ...item, image: Burger };
+    console.log(item);
+    let newitem = { ...item };
     setEmployees((employees) => [...employees, newitem]);
     handleClose();
   }
@@ -84,7 +86,6 @@ function Employee({ item, onDelete }) {
       </div>
       <div style={{ flex: "50%", fontWeight: "bold", paddingTop: "50px" }}>
         <p>Name: {item.name}</p>
-        <p>CNIC : {item.cnic}</p>
       </div>
       <div style={{ flex: "25%", paddingTop: "100px", paddingRight: "25px" }}>
         <Button onClick={() => onDelete(item)} redButton label="Remove" />

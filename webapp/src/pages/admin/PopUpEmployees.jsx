@@ -8,12 +8,15 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import MyButton from "../../components/Button";
+import { FormControl, FormHelperText, InputLabel } from "@material-ui/core";
+import Input from "@material-ui/core/Input";
+import { axios_authenticated } from "../../axios/axios-config";
 
 export default function PopUpFoodItem({ open, handleClose, handleSave }) {
   let [name, setName] = useState("");
-  let [cnic, setCnic] = useState("");
   let [phoneNo, setPhone] = useState("");
   let [password, setPassword] = useState("");
+  let [image, setImage] = useState(null);
 
   return (
     <div>
@@ -22,6 +25,7 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
+        <FormControl></FormControl>
         <DialogTitle id="form-dialog-title">
           <h2>
             <b>Cashier Details</b>
@@ -30,7 +34,7 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
         <div style={{ display: "flex" }}>
           <AccountBoxIcon style={{ flex: "10%" }} />
           <div style={{ paddingRight: "60px" }}>
-            <Button color="primary">Upload Image</Button>
+            <Input type="file" onChange={(e) => setImage(e.target.value)} />
           </div>
         </div>
         <DialogContent>
@@ -43,16 +47,6 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
             value={name}
             fullWidth
             onChange={(e) => setName(e.target.value)}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id=""
-            label="CNIC"
-            type="text"
-            value={cnic}
-            fullWidth
-            onChange={(e) => setCnic(e.target.value)}
           />
           <TextField
             autoFocus
@@ -81,9 +75,9 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
             onClick={() =>
               handleSave({
                 name,
-                cnic,
                 phoneNo,
                 password,
+                image,
               })
             }
             label="Save"
