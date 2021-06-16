@@ -5,10 +5,11 @@ const bcrypt = require("bcrypt");
 
 const auth = require('../middleware/auth');
 const { User, validateSignup } = require("../models/user");
-const {FoodItem} = require('../models/fooditem');
+const {FoodItem, foodItemSchema} = require('../models/fooditem');
 const {Category, validateCategory} = require('../models/category');
 const {Order, validateOrder} = require('../models/order');
 const { Feedback, validateFeedback } = require("../models/feedback");
+const { Types } = require("mongoose");
 const upload = require("../middleware/multer")("public/uploads/profile_pictures/");
 
 //Signup
@@ -39,43 +40,87 @@ router.post("/signup",upload.single('avatar'), async(req, res) => {
     }
 });
 
+
 //orderFood
 router.post("/orderFood", auth, async(req, res) => {
+
+
     try {
+
+        console.log(req.body);
+
 
         if(req.user.role != 2) return res.status(403).send("no privelage to access resource");
 
-        const { error } = validateOrder(req.body);//2 is customer role 
-        if (error) return res.status(400).send(error.details[0].message);
+        //const { error } = validateOrder(req.body);//2 is customer role 
+        //if (error) return res.status(400).send(error.details[0].message);
 
-        let user = await User.findById(req.body.user);
-        if(!user)  return res.status(400).send("No customer with this ID.");
-
-        const order = new Order ({
-            user : {
-                _id : user._id,
-                name: user.name
-            },
-            bill : req.body.bill,
-
-            //fooditems : req.body.fooditems
-        }); 
-
-        for (let index = 0; index < req.body.fooditems.length; index++) {
-            let food = await FoodItem.findById(req.body.fooditems[index]);
-                if (!food)  return res.status(400).send("No food item with this ID.");
-                console.log(food);
-            order.fooditems.push(food);
-            element = req.body.fooditems[index];
+        let user = await User.findById({_id: req.user._id});
+        if(!user)  {
+            return res.status(400).send("No customer with this ID.");
         }
+
+
+        console.log(user);
+
+        //first check if order does not already exist
+        let all_user_orders = await Order.find({user_id:user._id,status:['Queued','Cooking']});
+        if(all_user_orders.length > 0){
+            console.log("ALready Active Order");
+            return res.status(400).send("You already have a active order")
+        }
+        //-------------------------------------------------------
+        //input is fooditems [{id,quantity}]
+        //convert id to objs
+
+
+        let user_order = req.body;
+        
+
+        let food_items = [];
+        for(let i=0;i<user_order.length;i++){
+            let item = await FoodItem.findOne({_id:Types.ObjectId(user_order[i])});
+            food_items[i] = item;
+        }
+
+        food_items = food_items.filter((val)=>val!=null);
+        //order_items now contains all food items in the order now
+
+
+        if(food_items.length !== user_order.length){ //meaning some order items were not found to exist
+            console.log("Some Food Items Do not exist");
+            return res.status(400).send("Some food items of the order do not exist");
+        }
+
+        console.log("FOUND FOOD OBJS");
+
+        let bill = food_items.map(obj=>obj.price).reduce((prev,cur)=>{//calculate total bill
+            return prev + cur;
+        });
+
+        //now we have food_items and bill
+        //------------------------------------------------------
+
+         console.log("NOW SAVING ORDER");
+         console.log(bill);
+         console.log(food_items);
+  
+         const order = new Order ({
+             user_id:user._id,
+             user_name:user.name,
+             bill : bill,
+             fooditems : food_items
+        }); 
 
         await order.save();
 
         res.send(order);
+
     }
     catch(ex) {
-        console.log(ex.message);
-        res.status(500).send(ex.message);
+        console.log("ERROR:");
+        console.log(ex);
+        return res.status(500).send(ex.message);
     }
 });
 //getFoodOfTheDay
@@ -106,12 +151,8 @@ router.get("/activeOrders", auth, async(req, res) => {
 //view my order history
 router.get("/orderHistory", auth, async(req, res) => {
     try {
-        let currentUser = await User.findOne({phone: req.body.phone});
-        if (!currentUser) { return res.status(400).send("Customer does not exist"); }
 
-        console.log(currentUser._id);
-
-        const orders = await Order.find({ user: {_id: currentUser._id, name: currentUser.name} })
+        const orders = await Order.find({user_id: req.user._id,})
             .sort({ date : 1 })
             .lean();
     

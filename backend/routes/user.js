@@ -9,6 +9,7 @@ const { User, validateLogin, validateSignup } = require("../models/user");
 
 router.post("/login", async(req, res) => {
     try {
+
         const { error } = validateLogin(req.body);
         if (error) return res.status(400).send(error);
     
@@ -19,7 +20,7 @@ router.post("/login", async(req, res) => {
         if (!validPassword) return res.status(400).send("Invalid phone number or password");
 
         const token = user.generateAuthToken();
-        user = _.pick(user,["_id", "avatar", "name", "role"]);
+        user = _.pick(user,["_id", "avatar" ,"name", "role"]);
         res.send({user, access_token:token}); 
         
         // all these parameters are needed. do not change them.  token will be sent later for validation
@@ -45,14 +46,12 @@ router.get("/getAllFoodItems", auth, async(req, res) => {
 router.post('/changePassword', auth, async(req, res) => {
     try 
     {
-        let user = await User.findOne({phone : req.body.phone})
+        let user = await User.findOne({_id : req.user._id})
             .select('name phone avatar role password')
             .lean();
 
-        if(!user) return res.status(400).send('Phone number incorrect');
+        if(!user) return res.status(400).send('User incorrect');
 
-        validPassword = await bcrypt.compare(req.body.oldPassword, user.password);
-        if (!validPassword) return res.status(400).send("Invalid phone number or password");
 
         if(req.body.newPassword !== req.body.confirmPassword) return res.status(300).send('New Passwords donot match...');
 
@@ -77,14 +76,12 @@ router.post('/changePassword', auth, async(req, res) => {
 router.post('/changeUserName', auth, async(req, res) => {
     try 
     {
-        let user = await User.findOne({phone : req.body.phone})
-            .select('name phone avatar role password')
+        let user = await User.findOne({_id : req.user._id})
+            .select('id is required')
             .lean();
 
-        if(!user) return res.status(400).send('Phone number incorrect');
+        if(!user) return res.status(400).send('User incorrect');
 
-        validPassword = await bcrypt.compare(req.body.password, user.password);
-        if (!validPassword) return res.status(400).send("Invalid phone number or password");
 
         const newUser = await User.findByIdAndUpdate(user._id, { name : req.body.name},{ new : true });
 

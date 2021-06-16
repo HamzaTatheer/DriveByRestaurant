@@ -3,16 +3,15 @@ const Joi = require('joi');
 const {FoodItems, foodItemSchema} = require('./fooditem');
 
 const orderSchema = new mongoose.Schema({
-    user: {
-        type: new mongoose.Schema({
-            name : {
-                type : String,
-                required : true,
-                minlength : 4,
-                maxlength : 100 
-            },
-        }),
-        required: true
+
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
+    user_name:{
+        type : String,
+        required : true,
+        minlength : 4,
+        maxlength : 100 
     },
     date: {
         type: Date,
@@ -24,7 +23,7 @@ const orderSchema = new mongoose.Schema({
     },
     bill: {
         type: Number,
-        required: true, // lol we aint fuckin with this 
+        required: true, // lol we aint ******* with this 
     },
     status: {
         type: String,
