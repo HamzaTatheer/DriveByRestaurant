@@ -1,7 +1,7 @@
 export const SIGN_IN = "SIGN_IN";
 export const SIGN_UP = "SIGN_UP";
 export const SIGN_OUT = "SIGN_OUT";
-
+export const UPDATE = "UPDATE";
 
 export const signIn = (pfp,name,phone,role,token) => {
 	return (
@@ -18,6 +18,10 @@ export const signIn = (pfp,name,phone,role,token) => {
 		);
 
 };
+
+export const updateUserDetails = (obj)=>{
+	return {type: UPDATE,payload:obj};
+}
 
 export const signUp = (firstName,lastName,phone,password) => {
 					
