@@ -34,7 +34,11 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
         <div style={{ display: "flex" }}>
           <AccountBoxIcon style={{ flex: "10%" }} />
           <div style={{ paddingRight: "60px" }}>
-            <Input type="file" onChange={(e) => setImage(e.target.value)} />
+            <input
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])}
+              accept="image/*"
+            />
           </div>
         </div>
         <DialogContent>

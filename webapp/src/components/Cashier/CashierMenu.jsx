@@ -12,7 +12,7 @@ export default function Home() {
     <MenuBar>
       <Button onClick={() => history.push("/")} menuButton label="Home" />
       <Button
-        onClick={() => history.push("/delivery/orders")}
+        onClick={() => history.push("/cashier/orders")}
         menuButton
         label="Orders"
       />

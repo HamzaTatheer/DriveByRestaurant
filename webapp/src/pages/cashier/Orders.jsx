@@ -85,7 +85,7 @@ export default function Orders(props) {
       <ProfileHeader>
         <Button
           label="Chat with Customer Support"
-          onClick={() => props.history.push("/cashier/chatSupport")}
+          onClick={() => props.history.push("/cashier/chatsupport")}
         />
       </ProfileHeader>
       <h1 style={{ marginTop: "60px", marginLeft: "60px" }}>Orders</h1>

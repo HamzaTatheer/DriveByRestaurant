@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -10,12 +10,43 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import MyButton from "../../components/Button";
+import Input from "@material-ui/core/Input";
+import { axios_authenticated as axios } from "../../axios/axios-config";
 
 export default function PopUpFoodItem({ open, handleClose, handleSave }) {
   let [name, setName] = useState("");
   let [description, setDescription] = useState("");
   let [category, setCategory] = useState("");
   let [price, setPrice] = useState("");
+  let [image, setImage] = useState(null);
+
+  let [categories, setCategories] = useState([]);
+
+  function getCategoryId(name) {
+    let cat = categories.find((c) => c.name === name);
+    return cat.id;
+  }
+  useEffect(() => {
+    axios
+      .get("api/admin/getAllCategories")
+      .then((res) => {
+        console.log(res);
+        let data = res.data;
+        console.log("Response : ", res);
+        setCategories(
+          data.map((d) => {
+            console.log(d);
+            return {
+              id: d._id,
+              name: d.name,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div>
@@ -32,7 +63,11 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
         <div style={{ display: "flex" }}>
           <AccountBoxIcon style={{ flex: "10%" }} />
           <div style={{ paddingRight: "60px" }}>
-            <Button color="primary">Upload Image</Button>
+            <input
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])}
+              accept="image/*"
+            />
           </div>
         </div>
         <DialogContent>
@@ -62,11 +97,13 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
             value={category}
             label="Category"
             fullWidth
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              setCategory(e.target.value);
+            }}
           >
-            <MenuItem value={"Fast Food"}>Fast Food</MenuItem>
-            <MenuItem value={"Drinks"}>Drinks</MenuItem>
-            <MenuItem value={"Sides"}>Sides</MenuItem>
+            {categories.map((i) => (
+              <MenuItem value={i.name}>{i.name}</MenuItem>
+            ))}
           </Select>
           <TextField
             autoFocus
@@ -81,14 +118,17 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
         </DialogContent>
         <DialogActions>
           <MyButton
-            onClick={() =>
+            onClick={() => {
+              let cat = getCategoryId(category);
               handleSave({
                 name,
                 description,
-                category,
+                cat,
+                catname: category,
                 price,
-              })
-            }
+                image,
+              });
+            }}
             label="Save"
             redButton
           ></MyButton>
