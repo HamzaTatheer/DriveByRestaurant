@@ -1,6 +1,7 @@
-import {ADD_TO_CART,REMOVE_FROM_CART} from "../actions/cartAction";
+import {ADD_TO_CART,REMOVE_FROM_CART,CLEAR_CART} from "../actions/cartAction";
 
-const cartReducer = (state = [], action) => {
+const intiialState = [];
+const cartReducer = (state = intiialState, action) => {
 
 
 	switch(action.type){
@@ -9,17 +10,18 @@ const cartReducer = (state = [], action) => {
             let exists = false;
             let newState = state;
             newState = newState.map((obj)=>{
-                if(obj.id == action.payload){
+                if(obj.id === action.payload){
                    exists = true; 
                    obj.quantity++;
                 }
                 return obj;
             });
 
-            if(exists == false){
+            if(exists === false){
                 newState.push({id:action.payload,quantity:1});
             }
-
+            
+            localStorage.setItem("se_user_cart",JSON.stringify(newState));
             return newState;
         }
 
@@ -27,7 +29,7 @@ const cartReducer = (state = [], action) => {
             let newState = [];
 
             for (let i =0;i<state.length;i++){
-                if( state[i].id != action.payload ){
+                if( state[i].id !== action.payload ){
                     newState.push(state[i]);
                 }
                 else{
@@ -38,12 +40,25 @@ const cartReducer = (state = [], action) => {
                     }
                 }
             }
-
+            localStorage.setItem("se_user_cart",JSON.stringify(newState));
             return newState;
         }
 
+        case CLEAR_CART:{
+            localStorage.setItem("se_user_cart",JSON.stringify(intiialState));
+            return intiialState;
+        }
+
 		default:{
-            return state;
+            let loadedState = JSON.parse(localStorage.getItem("se_user_cart"));
+            
+            if(loadedState === null){
+                localStorage.setItem("se_user_cart",JSON.stringify(intiialState));
+                return intiialState;
+            }
+            else {
+                return loadedState;
+            }
         }
 	}
 };

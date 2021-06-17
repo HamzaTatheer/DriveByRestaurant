@@ -10,7 +10,7 @@ function ChatSupport(props) {
       <ProfileHeader>
         <Button
           label="Go back to Orders"
-          onClick={() => props.history.push("/delivery/orders")}
+          onClick={() => props.history.push("/cashier/orders")}
         />
       </ProfileHeader>
       <div

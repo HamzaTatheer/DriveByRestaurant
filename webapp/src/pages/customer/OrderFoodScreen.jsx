@@ -17,14 +17,21 @@ import { useHistory,useLocation } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import {axios_authenticated as axios} from "../../axios/axios-config";
 import baseUrl from "../../utilities/baseUrl";
+import {setOrder,removeOrder} from "../../redux/actions/orderAction";
+import {clearCart} from "../../redux/actions/cartAction";
+import {useDispatch} from "react-redux";
+import io from "socket.io-client";
 
 
 function MenuScreen(props) {
 
+  let history = useHistory();
+  let dispatch = useDispatch();
   let [foodItems,setFoodItems] = useState([]);
 
   useEffect(()=>{
-    axios.get("api/menu/menu").then((res)=>{
+    
+    let fetchFoodItems = () => axios.get("api/menu/menu").then((res)=>{
       console.log(res);
       let data = res.data;
       setFoodItems(data.map((d)=>{
@@ -33,34 +40,32 @@ function MenuScreen(props) {
     }).catch((err)=>{
       console.log(err);
     });
-  },[])
 
-  // let foodItems = [
-  //   {
-  //     id: 1,
-  //     name: "zinger burger",
-  //     category: "burger",
-  //     price: 600,
-  //     description:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "wehshi burger",
-  //     category: "burger",
-  //     price: 600,
-  //     description:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "coke",
-  //     category: "drink",
-  //     price: 90,
-  //     description:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel ligula nec mauris vestibulum pulvinar in vitae magna. Nam scelerisque tortor metus, blandit fringilla urna tempor quis.",
-  //   },
-  // ];
+
+    axios.post("/api/customer/activeOrders").then((res)=>{
+      console.log("RES");
+      console.log(res.data);
+      console.log(res.data.length);
+      if(res.data.length === 0)//no order placed before
+      {
+        fetchFoodItems();
+      }
+      else
+      {
+        console.log(res.data);
+        dispatch(setOrder({id:res.data[0]._id,status:res.data[0].status}));
+        history.push("/customer/status");
+      }
+
+    }).catch((err)=>{
+      alert("Error Getting your active orders");
+      console.log(err)
+      console.log("----");
+      history.push("/customer/orderHistory");
+    })
+
+
+  },[])
 
   let [search, setSearch] = useState("");
   let [category, changeCategory] = useState("All");
@@ -147,6 +152,7 @@ function MenuScreen(props) {
 function Checkout(props) {
   let cart_items = useSelector((state) => state.cart);
   let history = useHistory();
+  let dispatch = useDispatch();
 
   let confirmOrder = () => {
     if (cart_items.length == 0) {
@@ -168,9 +174,12 @@ function Checkout(props) {
     console.log(req_body);
     axios.post("/api/customer/orderFood",req_body).then((res)=>{
       alert("Order placed Succesfuly");
+      dispatch(setOrder({id:res.data._id,status:res.data.status}));
+      dispatch(clearCart());
       history.push({pathname:"/customer/status",state: { id: res.data._id }});
     }).catch((res)=>{
       console.log(res.body);
+      dispatch(clearCart());
     })
     //props.history.push("/customer/status");
   };
@@ -221,22 +230,52 @@ function Checkout(props) {
 function Status(props) {
   
   let history = useHistory();
-  const location = useLocation();
-  let [orderId,setOrderId] = useState(null);
 
-  useEffect(() => {
-      setOrderId(location.state.id);
-  }, [location,setOrderId]);
+  let order = useSelector((state)=>state.order);
+
+  let orderId = order.id;
 
 
-  
-  
+  let dispatch = useDispatch();
+
   //socket.on("order-status-change") {change status}
   //side case. if status is Done
   //go to next page i.e order history
 
+  const socket = io("http://localhost:9001", {reconnectionDelayMax: 10000});
+  useEffect(()=>{
+    socket.on("status_change",(d)=>{
+      //d = JSON.parse(d);
+      if(orderId === d.order_id){
+        setStatus(d.order_status);
+        if(d.order_status === "Ready"){
+          setTimeout(()=>{
+            history.push("/customer/orderHistory");
+            dispatch(removeOrder());
+          },2000);
+        }
+      }
 
-  let [status, setStatus] = useState("Queued");
+    })
+
+    return ()=>{
+      socket.off("message");
+    }
+
+  },[orderId,socket,removeOrder,history,dispatch])
+
+
+
+  let [status, setStatus] = useState(order.status);
+
+  useEffect(()=>{
+    axios.post("/api/customer/getOrderStatus",{_id:orderId}).then((res)=>{
+      setStatus(res.data.status);
+    }).catch((err)=>{
+      console.log(err);
+    });
+  },[])
+
   
 
   // setTimeout(() => {
@@ -278,6 +317,9 @@ function Status(props) {
 
 function Chat(props) {
 
+  let history = useHistory();
+  const location = useLocation();
+
 
   return (
     <>
@@ -293,7 +335,7 @@ function Chat(props) {
           <div className="col-xs-12 col-md-10 d-flex flex-column align-items-center">
             <div className="w-100">
               <h1 className="text-center" style={{ marginTop: "60px" }}>
-                Order# 3
+                {location.state && location.state.id ? `Order# ${location.state.id}` : ''}
               </h1>
               <ChatBox />
             </div>
