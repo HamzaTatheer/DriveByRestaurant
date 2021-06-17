@@ -13,59 +13,68 @@ import CheckoutItem from "../../components/CheckOutItem";
 import WaitingAnimation from "../../components/Customer/WaitingAnimation";
 import ChatBox from "../../components/Customer/ChatBox";
 import { useSelector } from "react-redux";
-import { useHistory,useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
-import {axios_authenticated as axios} from "../../axios/axios-config";
+import { axios_authenticated as axios } from "../../axios/axios-config";
 import baseUrl from "../../utilities/baseUrl";
-import {setOrder,removeOrder} from "../../redux/actions/orderAction";
-import {clearCart} from "../../redux/actions/cartAction";
-import {useDispatch} from "react-redux";
+import { setOrder, removeOrder } from "../../redux/actions/orderAction";
+import { clearCart } from "../../redux/actions/cartAction";
+import { useDispatch } from "react-redux";
 import io from "socket.io-client";
 
-
 function MenuScreen(props) {
-
   let history = useHistory();
   let dispatch = useDispatch();
-  let [foodItems,setFoodItems] = useState([]);
+  let [foodItems, setFoodItems] = useState([]);
 
-  useEffect(()=>{
-    
-    let fetchFoodItems = () => axios.get("api/menu/menu").then((res)=>{
-      console.log(res);
-      let data = res.data;
-      setFoodItems(data.map((d)=>{
-        return {id:d._id, picture:d.avatar,name:d.name,category:d.category,price:d.price,description:d.description}
-      }))
-    }).catch((err)=>{
-      console.log(err);
-    });
+  useEffect(() => {
+    let fetchFoodItems = () =>
+      axios
+        .get("api/menu/menu")
+        .then((res) => {
+          console.log(res);
+          let data = res.data;
+          setFoodItems(
+            data.map((d) => {
+              return {
+                id: d._id,
+                picture: d.avatar,
+                name: d.name,
+                category: d.category,
+                price: d.price,
+                description: d.description,
+              };
+            })
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-
-    axios.post("/api/customer/activeOrders").then((res)=>{
-      console.log("RES");
-      console.log(res.data);
-      console.log(res.data.length);
-      if(res.data.length === 0)//no order placed before
-      {
-        fetchFoodItems();
-      }
-      else
-      {
+    axios
+      .post("/api/customer/activeOrders")
+      .then((res) => {
+        console.log("RES");
         console.log(res.data);
-        dispatch(setOrder({id:res.data[0]._id,status:res.data[0].status}));
-        history.push("/customer/status");
-      }
-
-    }).catch((err)=>{
-      alert("Error Getting your active orders");
-      console.log(err)
-      console.log("----");
-      history.push("/customer/orderHistory");
-    })
-
-
-  },[])
+        console.log(res.data.length);
+        if (res.data.length === 0) {
+          //no order placed before
+          fetchFoodItems();
+        } else {
+          console.log(res.data);
+          dispatch(
+            setOrder({ id: res.data[0]._id, status: res.data[0].status })
+          );
+          history.push("/customer/status");
+        }
+      })
+      .catch((err) => {
+        alert("Error Getting your active orders");
+        console.log(err);
+        console.log("----");
+        history.push("/customer/orderHistory");
+      });
+  }, []);
 
   let [search, setSearch] = useState("");
   let [category, changeCategory] = useState("All");
@@ -91,25 +100,45 @@ function MenuScreen(props) {
 
   let [isOpen, setOpen] = useState(false);
 
-  let [bestOrder,setBestOrder] = useState(null);
+  let [bestOrder, setBestOrder] = useState(null);
 
-  useEffect(()=>{
-    axios.post("/api/menu/orderOfTheDay").then(({data})=>{
-      if(data.length>0){
-        setBestOrder({avatar:data[0].avatar,name:data[0].name,price:data[0].price});
-        setOpen(true);
-      }
-    })
-  },[setBestOrder])
+  useEffect(() => {
+    axios
+      .get("/api/menu/orderOfTheDay")
+      .then(({ data }) => {
+        alert("!!!!");
+        if (data.length > 0) {
+          setBestOrder({
+            avatar: data[0].avatar,
+            name: data[0].name,
+            price: data[0].price,
+          });
+          setOpen(true);
+          console.log("yyyyyyyyyyyyyy", bestOrder);
+          console.log("xxxxxxxxxxxx", data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("caught error");
+      });
+  }, [setBestOrder]);
 
   return (
     <div>
       <Dialog fullWidth open={isOpen} onClose={() => setOpen(false)}>
         <div style={{ textAlign: "center", margin: "10px" }}>
           <h1>Most Ordered Today</h1>
-          <img alt="best order" style={{width:"100px",height:"100px"}} src={bestOrder.avatar}/>
-          <p>{bestOrder.name}</p>
-          <p>{bestOrder.price}</p>
+          {bestOrder !== null ? (
+            <>
+              <img
+                src={`${baseUrl}/public/uploads/food_pictures/${bestOrder.avatar}`}
+                alt={""}
+              />
+              <p>{bestOrder.name}</p>
+              <p>{bestOrder.price}</p>{" "}
+            </>
+          ) : null}
         </div>
       </Dialog>
 
@@ -140,7 +169,7 @@ function MenuScreen(props) {
           <div style={{ marginTop: "20px" }}>
             <div class="row row-cols-12">
               {filteredListBySearch(filteredListByCategory(foodItems)).map(
-                ({ id,picture, name, description, category, price }) => (
+                ({ id, picture, name, description, category, price }) => (
                   <div class="col mb-4">
                     <FoodCard
                       id={id}
@@ -168,6 +197,7 @@ function Checkout(props) {
   let history = useHistory();
   let dispatch = useDispatch();
 
+  useEffect(() => {});
   let confirmOrder = () => {
     if (cart_items.length == 0) {
       alert("No Items in Cart. Select from Menu");
@@ -176,27 +206,34 @@ function Checkout(props) {
 
     console.log(cart_items);
 
-
     let req_body = [];
 
-    for(let i=0;i<cart_items.length;i++)
-    while(cart_items[i].quantity > 0){
-      req_body.push(cart_items[i].id);
-      cart_items[i].quantity--;
-    }
+    for (let i = 0; i < cart_items.length; i++)
+      while (cart_items[i].quantity > 0) {
+        req_body.push(cart_items[i].id);
+        cart_items[i].quantity--;
+      }
 
     console.log(req_body);
-    axios.post("/api/customer/orderFood",req_body).then((res)=>{
-      alert("Order placed Succesfuly");
-      dispatch(setOrder({id:res.data._id,status:res.data.status}));
-      dispatch(clearCart());
-      history.push({pathname:"/customer/status",state: { id: res.data._id }});
-    }).catch((res)=>{
-      console.log(res.body);
-      dispatch(clearCart());
-    })
+    axios
+      .post("/api/customer/orderFood", req_body)
+      .then((res) => {
+        alert("Order placed Succesfuly");
+        dispatch(setOrder({ id: res.data._id, status: res.data.status }));
+        dispatch(clearCart());
+        history.push({
+          pathname: "/customer/status",
+          state: { id: res.data._id },
+        });
+      })
+      .catch((res) => {
+        console.log(res.body);
+        dispatch(clearCart());
+      });
     //props.history.push("/customer/status");
   };
+  let pricePerItem = cart_items.map((val) => val.quantity * val.price);
+  let bill = pricePerItem.reduce((i, j) => i + j, 0);
 
   return (
     <>
@@ -228,8 +265,19 @@ function Checkout(props) {
           <div className="col-xs-0 col-md-2" />
           <div className="col-xs-12 col-md-8">
             {cart_items.map((obj) => (
-              <CheckoutItem key={obj.id} id={obj.id} quantity={obj.quantity} />
+              <CheckoutItem
+                key={obj.id}
+                name={obj.name}
+                price={obj.price}
+                id={obj.id}
+                quantity={obj.quantity}
+              />
             ))}
+            <div>
+              <p>
+                <b>Total : {bill}</b>
+              </p>
+            </div>
             <div className="w-100 d-flex justify-content-center">
               <Button onClick={() => confirmOrder()} label="Confirm Order" />
             </div>
@@ -242,13 +290,11 @@ function Checkout(props) {
 }
 
 function Status(props) {
-  
   let history = useHistory();
 
-  let order = useSelector((state)=>state.order);
+  let order = useSelector((state) => state.order);
 
   let orderId = order.id;
-
 
   let dispatch = useDispatch();
 
@@ -256,41 +302,38 @@ function Status(props) {
   //side case. if status is Done
   //go to next page i.e order history
 
-  const socket = io("http://localhost:9001", {reconnectionDelayMax: 10000});
-  useEffect(()=>{
-    socket.on("status_change",(d)=>{
+  const socket = io("http://localhost:9001", { reconnectionDelayMax: 10000 });
+  useEffect(() => {
+    socket.on("status_change", (d) => {
       //d = JSON.parse(d);
-      if(orderId === d.order_id){
+      if (orderId === d.order_id) {
         setStatus(d.order_status);
-        if(d.order_status === "Ready"){
-          setTimeout(()=>{
+        if (d.order_status === "Ready") {
+          setTimeout(() => {
             history.push("/customer/orderHistory");
             dispatch(removeOrder());
-          },2000);
+          }, 2000);
         }
       }
+    });
 
-    })
-
-    return ()=>{
+    return () => {
       socket.off("message");
-    }
-
-  },[orderId,socket,removeOrder,history,dispatch])
-
-
+    };
+  }, [orderId, socket, removeOrder, history, dispatch]);
 
   let [status, setStatus] = useState(order.status);
 
-  useEffect(()=>{
-    axios.post("/api/customer/getOrderStatus",{_id:orderId}).then((res)=>{
-      setStatus(res.data.status);
-    }).catch((err)=>{
-      console.log(err);
-    });
-  },[])
-
-  
+  useEffect(() => {
+    axios
+      .post("/api/customer/getOrderStatus", { _id: orderId })
+      .then((res) => {
+        setStatus(res.data.status);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   // setTimeout(() => {
   //   setStatus("cooking");
@@ -328,12 +371,9 @@ function Status(props) {
   );
 }
 
-
 function Chat(props) {
-
   let history = useHistory();
   const location = useLocation();
-
 
   return (
     <>
@@ -349,7 +389,9 @@ function Chat(props) {
           <div className="col-xs-12 col-md-10 d-flex flex-column align-items-center">
             <div className="w-100">
               <h1 className="text-center" style={{ marginTop: "60px" }}>
-                {location.state && location.state.id ? `Order# ${location.state.id}` : ''}
+                {location.state && location.state.id
+                  ? `Order# ${location.state.id}`
+                  : ""}
               </h1>
               <ChatBox />
             </div>

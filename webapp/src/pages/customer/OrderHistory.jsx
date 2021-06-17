@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import ProfileHeader from "../../components/ProfileHeader";
 import Button from "../../components/Button";
 import "../../index.css";
+import calculateQuantity from "../../utilities/calculateQuantity";
 import { axios_authenticated as axios } from "../../axios/axios-config";
 
 export default function Orders(props) {
-
-
   let data = [
     {
       _id: "60c98b987b4f15991f02f37d",
@@ -15,24 +14,22 @@ export default function Orders(props) {
       user_name: "admin",
       bill: 2000,
       fooditems: [
-          {
-              ingredients: [
-                  "[\"asd\",\"asd\"]"
-              ],
-              _id: "60c8755bd5b7c11308471a63",
-              name: "Coke 250 ml",
-              price: 500,
-              category: {
-                  "_id": "60c8755bd5b7c11308471a64",
-                  "name": "drinks"
-              },
-              description: "Whats a dinner without a Coke ?",
-              avatar: "avatar1623749979845.jpeg",
-              __v: 0
-          }
-      ]
-    }
-  ]
+        {
+          ingredients: ['["asd","asd"]'],
+          _id: "60c8755bd5b7c11308471a63",
+          name: "Coke 250 ml",
+          price: 500,
+          category: {
+            _id: "60c8755bd5b7c11308471a64",
+            name: "drinks",
+          },
+          description: "Whats a dinner without a Coke ?",
+          avatar: "avatar1623749979845.jpeg",
+          __v: 0,
+        },
+      ],
+    },
+  ];
 
   // [
   //   {
@@ -45,28 +42,28 @@ export default function Orders(props) {
   //     status: "Queued",
   //   },
   // ]
-  
 
   let [orders, setOrders] = useState([]);
 
-  useEffect(()=>{
-    axios.get("/api/customer/orderHistory").then((res)=>{
-      setOrders(res.data.map((val,index)=>{
-        return {
-          orderNo:val._id,
-          foodItems:val.fooditems.map((item)=>{
-            return {name:item.name,price:item.price,quantity:3}
-          }),
-          total:val.bill,
-          status:val.status
-        }
-      }))
-    }).catch((err)=>{
-      console.log(err);
-    });
-
-  },[])
-
+  useEffect(() => {
+    axios
+      .get("/api/customer/orderHistory")
+      .then((res) => {
+        setOrders(
+          res.data.map((val, index) => {
+            return {
+              orderNo: val._id,
+              foodItems: calculateQuantity(val.fooditems),
+              total: val.bill,
+              status: val.status,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [stylz, setStylz] = useState(null);
   console.log(orders);
