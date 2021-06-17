@@ -1,7 +1,9 @@
 import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
-import img1 from "../../assets/salad.png";
+import img1 from "../../assets/food1.png";
+import img2 from "../../assets/burger1.jpeg";
+
 
 export default function Slider(){
     return (
@@ -15,9 +17,9 @@ export default function Slider(){
                                 <img style={{width:"400px"}} src={img1}/>
                             </div>
                             <div className="col-md-8 col-lg-5 text-left">
-                                <h3 style={{paddingTop:"30px"}}>Teriyaki</h3>
+                                <h3 style={{paddingTop:"30px"}}>American chopsoy</h3>
                                 <p>
-                                    Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir 
+                                American chop suey is an American pasta casserole made with ground beef, macaroni and a seasoned tomato sauce, found in the cuisine of New England and other regions of the United States.
                                 </p>
                             </div>
                         </div>
@@ -26,12 +28,12 @@ export default function Slider(){
                     <div>
                         <div className="row">
                             <div className="col-md-12 col-lg-5">
-                                <img style={{width:"400px"}} src={img1}/>
+                                <img style={{width:"400px"}} src={img2}/>
                             </div>
                             <div className="col-md-8 col-lg-5 text-left">
-                                <h3 style={{paddingTop:"30px"}}>Teriyaki</h3>
+                                <h3 style={{paddingTop:"30px"}}>Wehshi Burger</h3>
                                 <p>
-                                    Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir Lorem ipsum doir oir 
+                                    Cooked with our special sauce. This Burger is filled with onions and lettuce and beef. 
                                 </p>
                             </div>
                         </div>
