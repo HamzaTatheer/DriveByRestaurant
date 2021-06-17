@@ -10,12 +10,16 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import MyButton from "../../components/Button";
+import Input from "@material-ui/core/Input";
 
 export default function PopUpFoodItem({ open, handleClose, handleSave }) {
   let [name, setName] = useState("");
   let [description, setDescription] = useState("");
   let [category, setCategory] = useState("");
   let [price, setPrice] = useState("");
+  let [image, setImage] = useState(null);
+
+  let [categories, setCategories] = useState([]);
 
   return (
     <div>
@@ -32,7 +36,7 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
         <div style={{ display: "flex" }}>
           <AccountBoxIcon style={{ flex: "10%" }} />
           <div style={{ paddingRight: "60px" }}>
-            <Button color="primary">Upload Image</Button>
+            <Input type="file" onChange={(e) => setImage(e.target.value)} />
           </div>
         </div>
         <DialogContent>

@@ -4,13 +4,12 @@ import Button from "../../components/Button";
 import ChatBox from "../../components/Customer/ChatBox";
 
 function ChatSupport(props) {
-
   return (
     <div>
       <ProfileHeader>
         <Button
           label="Go back to Orders"
-          onClick={() => props.history.push("/delivery/orders")}
+          onClick={() => props.history.push("/cashier/orders")}
         />
       </ProfileHeader>
       <div
@@ -19,7 +18,7 @@ function ChatSupport(props) {
       >
         <p>Take Away Customer Support</p>
       </div>
-        <ChatBox/>
+      <ChatBox />
     </div>
   );
 }

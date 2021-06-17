@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Buttonned from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -12,6 +12,7 @@ import Button from "../../components/Button";
 import ProfileHeader from "../../components/ProfileHeader";
 import Burger from "../../../src/assets/customer/burger.png";
 import PopUpFoodItem from "./PopUpFoodItem";
+import { axios_authenticated as axios } from "../../axios/axios-config";
 function FoodItems(props) {
   const [open, setOpen] = React.useState(false);
 
@@ -23,36 +24,34 @@ function FoodItems(props) {
   const handleClose = () => {
     setOpen(false);
   };
-  let [fooditems, setFoodItems] = useState([
-    {
-      id: 1,
-      name: "Weshi Burger",
-      category: "Fast Food",
-      price: "500",
-      image: Burger,
-    },
-    {
-      id: 2,
-      name: "Weshi Coke",
-      category: "Drinks",
-      price: "50",
-      image: Burger,
-    },
-    {
-      id: 3,
-      name: "Weshi Pizza",
-      category: "Fast Food",
-      price: "350",
-      image: Burger,
-    },
-    {
-      id: 4,
-      name: "Weshi Kutta",
-      category: "Fast Food",
-      price: "200",
-      image: Burger,
-    },
-  ]);
+  let [fooditems, setFoodItems] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("api/admin/getAllFoodItems")
+      .then((res) => {
+        console.log(res);
+        let data = res.data;
+        console.log("Response : ", res);
+        setFoodItems(
+          data.map((d) => {
+            console.log(d);
+            return {
+              id: d._id,
+              name: d.name,
+              category: d.category.name,
+              image: d.avatar,
+              price: d.price,
+              description: d.description,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   function handleSave(item) {
     let newitem = { ...item, id: 5, image: Burger };
     console.log(newitem);
@@ -60,8 +59,19 @@ function FoodItems(props) {
     handleClose();
   }
   function removeItem(item) {
-    const newItems = fooditems.filter((i) => i.id != item.id);
-    setFoodItems(newItems);
+    console.log(item);
+    let formData = new FormData();
+    formData.append("id", item.id);
+    axios
+      .post("api/admin/removeFoodItem", { id: item.id })
+      .then((res) => {
+        console.log(res);
+        const newItems = fooditems.filter((i) => i.id != item.id);
+        setFoodItems(newItems);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   return (
     <div>

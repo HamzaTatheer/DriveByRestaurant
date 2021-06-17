@@ -15,8 +15,9 @@ function Employees(props) {
         let data = res.data;
         setEmployees(
           data.map((d) => {
+            console.log(d);
             return {
-              cnic: d._id,
+              id: d._id,
               image: d.avatar,
               name: d.name,
             };
@@ -41,12 +42,45 @@ function Employees(props) {
   function handleSave(item) {
     console.log(item);
     let newitem = { ...item };
-    setEmployees((employees) => [...employees, newitem]);
+    let formData = new FormData();
+    formData.append("avatar", item.image);
+    formData.append("name", item.name);
+    formData.append("phone", item.phoneNo);
+    formData.append("password", item.password);
+    setEmployees([...employees, newitem]);
+
+    axios
+      .post("api/admin/addCashier", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     handleClose();
   }
   function removeItem(item) {
-    const newItems = employees.filter((i) => i.cnic != item.cnic);
-    setEmployees(newItems);
+    let formData = new FormData();
+    formData.append("id", item.id);
+    axios
+      .post("api/admin/removeCashier", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        const newItems = employees.filter((i) => i.id != item.id);
+        setEmployees(newItems);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   return (
     <div>
