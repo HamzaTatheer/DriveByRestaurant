@@ -59,6 +59,7 @@ function Employees(props) {
         newitem.id = res.data._id;
         newitem.image = res.data.avatar;
         setEmployees([...employees, newitem]);
+        alert("Cashier Added Successfully!");
       })
       .catch((err) => {
         console.log(err);

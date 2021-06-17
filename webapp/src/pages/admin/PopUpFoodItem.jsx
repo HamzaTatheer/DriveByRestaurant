@@ -128,6 +128,11 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
                 price,
                 image,
               });
+              setName("");
+              setDescription("");
+              setCategory("");
+              setPrice("");
+              setImage(null);
             }}
             label="Save"
             redButton

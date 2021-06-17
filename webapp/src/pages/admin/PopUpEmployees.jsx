@@ -76,14 +76,18 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
         </DialogContent>
         <DialogActions>
           <MyButton
-            onClick={() =>
+            onClick={() => {
               handleSave({
                 name,
                 phoneNo,
                 password,
                 image,
-              })
-            }
+              });
+              setName("");
+              setPhone("");
+              setPassword("");
+              setImage("");
+            }}
             label="Save"
             redButton
           ></MyButton>

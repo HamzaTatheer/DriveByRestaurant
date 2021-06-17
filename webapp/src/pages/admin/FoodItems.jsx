@@ -75,6 +75,7 @@ function FoodItems(props) {
         newitem.id = res.data._id;
         newitem.image = res.data.avatar;
         setFoodItems([...fooditems, newitem]);
+        alert("Item Added Successfully!");
       })
       .catch((err) => {
         console.log(err);
