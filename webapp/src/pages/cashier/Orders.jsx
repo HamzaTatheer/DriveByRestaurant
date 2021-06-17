@@ -87,6 +87,7 @@ export default function Orders(props) {
   const [stylz, setStylz] = useState(null);
   console.log(orders);
 
+  let [category, setCategory] = useState("");
   return (
     <div>
       <ProfileHeader>
@@ -95,13 +96,25 @@ export default function Orders(props) {
           onClick={() => props.history.push("/cashier/chatsupport")}
         />
       </ProfileHeader>
+
       <h1 style={{ marginTop: "60px", marginLeft: "60px" }}>Orders</h1>
-      {orders.map((item) => (
-        <OrderBox
-          item={item}
-          sendStatusUpdate={(id, status) => sendStatusUpdate(id, status)}
-        />
-      ))}
+      <select onChange={(e) => setCategory(e.target.value)}>
+        <option value="">All</option>
+        <option value="Queued">Queued</option>
+        <option selected value="Cooking">
+          Cooking
+        </option>
+        <option value="Ready">Ready</option>
+      </select>
+
+      {orders
+        .filter((val) => (category !== "" ? val.status == category : true))
+        .map((item) => (
+          <OrderBox
+            item={item}
+            sendStatusUpdate={(id, status) => sendStatusUpdate(id, status)}
+          />
+        ))}
     </div>
   );
 }
