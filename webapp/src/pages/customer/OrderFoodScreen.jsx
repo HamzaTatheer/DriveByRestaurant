@@ -91,11 +91,23 @@ function MenuScreen(props) {
 
   let [isOpen, setOpen] = useState(false);
 
+  let [bestOrder,setBestOrder] = useState(null);
+
+  useEffect(()=>{
+    axios.post("/api/menu/orderOfTheDay").then(({data})=>{
+      setBestOrder({avatar:data.avatar,name:data.name,price:data.price});
+      setOpen(true);
+    })
+  },[setBestOrder])
+
   return (
     <div>
       <Dialog fullWidth open={isOpen} onClose={() => setOpen(false)}>
         <div style={{ textAlign: "center", margin: "10px" }}>
           <h1>Most Ordered Today</h1>
+          <img alt="best order" style={{width:"100px",height:"100px"}} src={bestOrder.avatar}/>
+          <p>{bestOrder.name}</p>
+          <p>{bestOrder.price}</p>
         </div>
       </Dialog>
 
