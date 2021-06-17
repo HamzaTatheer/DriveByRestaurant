@@ -16,21 +16,28 @@ import DeliveryPage from "./pages/cashier/";
 //think of the component below as a rendered that it looking at props and a variable called "path" to see what to render
 
 function App() {
-
-	return (
-		<div className="App">
-			<Router>
-				<Switch>
-					<Route exact path="/" component={Home} />
-					<Route exact path="/login" component={Login} />
-          			<Route exact path="/signup" component={SignUp} />
-					<ProtectedRoute privelage={0} path="/admin" component={AdminPage}/>
-					<ProtectedRoute privelage={1} path="/cashier" component={DeliveryPage}/>
-					<ProtectedRoute privelage={2} path="/customer" component={CustomerPage}/>
-				</Switch>
-			</Router>
-		</div>
-	);
+  return (
+    <div className="App">
+      <Router>
+        <Switch>
+          <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={Home} />
+          <ProtectedRoute privelage={0} path="/admin" component={AdminPage} />
+          <ProtectedRoute
+            privelage={1}
+            path="/cashier"
+            component={DeliveryPage}
+          />
+          <ProtectedRoute
+            privelage={2}
+            path="/customer"
+            component={CustomerPage}
+          />
+        </Switch>
+      </Router>
+    </div>
+  );
 }
 
 export default App;

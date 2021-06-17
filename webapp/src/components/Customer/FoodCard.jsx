@@ -21,7 +21,7 @@ export default function FoodCard({
     <div class="card">
       <div className="d-flex justify-content-center">
         <div
-          style={{ height: "250px", width: "100%", background: "#FFF9F9" }}
+          style={{ height: "250px", background: "#FFF9F9", overflow: "hidden" }}
           className="d-flex justify-content-center align-items-center"
         >
           <img src={picture} width="250px" />

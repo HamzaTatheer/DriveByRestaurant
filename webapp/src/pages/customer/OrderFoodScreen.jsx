@@ -106,7 +106,6 @@ function MenuScreen(props) {
     axios
       .get("/api/menu/orderOfTheDay")
       .then(({ data }) => {
-        alert("!!!!");
         if (data.length > 0) {
           setBestOrder({
             avatar: data[0].avatar,
@@ -114,13 +113,10 @@ function MenuScreen(props) {
             price: data[0].price,
           });
           setOpen(true);
-          console.log("yyyyyyyyyyyyyy", bestOrder);
-          console.log("xxxxxxxxxxxx", data);
         }
       })
       .catch((err) => {
         console.log(err);
-        alert("caught error");
       });
   }, [setBestOrder]);
 
@@ -132,6 +128,7 @@ function MenuScreen(props) {
           {bestOrder !== null ? (
             <>
               <img
+                style={{ width: "200px" }}
                 src={`${baseUrl}/public/uploads/food_pictures/${bestOrder.avatar}`}
                 alt={""}
               />
@@ -273,7 +270,7 @@ function Checkout(props) {
                 quantity={obj.quantity}
               />
             ))}
-            <div>
+            <div style={{ paddingLeft: "100px" }}>
               <p>
                 <b>Total : {bill}</b>
               </p>

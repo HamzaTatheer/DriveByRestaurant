@@ -14,16 +14,17 @@ export default function CheckoutItem({ id, name, price, quantity }) {
         style={{ justifyContent: "space-evenly", alignItems: "center" }}
         className="d-flex"
       >
-        <div>{name}</div>
-        <div>
+        <div style={{ width: "100px" }}>{name}</div>
+        <div style={{ width: "100px" }}>
           <b>{price * quantity}</b>
         </div>
         <div>
-          <Button plusButton onClick={() => dispatch(addToCart(id))} />
+          <Button minusButton onClick={() => dispatch(removeFromCart(id))} />
         </div>
+
         <div>{quantity}</div>
         <div>
-          <Button minusButton onClick={() => dispatch(removeFromCart(id))} />
+          <Button plusButton onClick={() => dispatch(addToCart(id))} />
         </div>
       </div>
       <hr />

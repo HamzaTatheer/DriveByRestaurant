@@ -68,7 +68,7 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
             margin="dense"
             id="password"
             label="Password"
-            type="text"
+            type="password"
             fullWidth
             onChange={(e) => setPassword(e.target.value)}
             value={password}
@@ -76,14 +76,18 @@ export default function PopUpFoodItem({ open, handleClose, handleSave }) {
         </DialogContent>
         <DialogActions>
           <MyButton
-            onClick={() =>
+            onClick={() => {
               handleSave({
                 name,
                 phoneNo,
                 password,
                 image,
-              })
-            }
+              });
+              setName("");
+              setPhone("");
+              setPassword("");
+              setImage(null);
+            }}
             label="Save"
             redButton
           ></MyButton>

@@ -21,7 +21,6 @@ const cartReducer = (state = intiialState, action) => {
       });
 
       if (exists === false) {
-        alert("EXISTS = FALSE");
         console.log(action.payload);
         newState.push({ ...action.payload, quantity: 1 });
       }

@@ -4,7 +4,6 @@ export const CLEAR_CART = "CLEAR_CART";
 export const SELECT_CART_ITEM = "SELECT_CART_ITEM";
 
 export const selectCartItem = (item_id, name, price) => {
-  alert(name);
   return {
     type: SELECT_CART_ITEM,
     payload: { id: item_id, name, price },

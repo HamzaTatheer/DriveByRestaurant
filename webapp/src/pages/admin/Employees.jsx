@@ -59,8 +59,10 @@ function Employees(props) {
         newitem.id = res.data._id;
         newitem.image = res.data.avatar;
         setEmployees([...employees, newitem]);
+        alert("Cashier Added Successfully");
       })
       .catch((err) => {
+        alert("Try again later!");
         console.log(err);
       });
 
@@ -79,8 +81,10 @@ function Employees(props) {
         console.log(res);
         const newItems = employees.filter((i) => i.id != item.id);
         setEmployees(newItems);
+        alert("Cashier Removed Successfully");
       })
       .catch((err) => {
+        alert("Try again later");
         console.log(err);
       });
   }

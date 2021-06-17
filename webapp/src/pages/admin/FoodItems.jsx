@@ -75,8 +75,10 @@ function FoodItems(props) {
         newitem.id = res.data._id;
         newitem.image = res.data.avatar;
         setFoodItems([...fooditems, newitem]);
+        alert("Item added successfully");
       })
       .catch((err) => {
+        alert("Food Item could not be added");
         console.log(err);
       });
 
@@ -92,8 +94,10 @@ function FoodItems(props) {
         console.log(res);
         const newItems = fooditems.filter((i) => i.id != item.id);
         setFoodItems(newItems);
+        alert("Item Removed Successfully");
       })
       .catch((err) => {
+        alert("Failed to delete item");
         console.log(err);
       });
   }
