@@ -22,8 +22,13 @@ module.exports = function (app) {
       socket.broadcast.emit("message",data);
     })
 
-    socket.on("status_change",({order_id,order_status})=>{
-      socket.broadcast.emit("status_change",data);
+    socket.on("status_change",(data)=>{
+      console.log(data);
+      let {order_id,order_status} = data;
+      console.log(order_id);
+      console.log(order_status);
+      console.log("*******");
+      socket.broadcast.emit("status_change",{order_id,order_status});
     })
 
 

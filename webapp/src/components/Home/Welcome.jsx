@@ -2,12 +2,29 @@ import React from "react";
 import img from "../../assets/salad.png";
 import Button from "../../components/Button";
 import {useHistory} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useSelector,useDispatch} from "react-redux";
+import {signOut} from "../../redux/actions/authAction";
 
 export default function Welcome(){
 
     const history =useHistory();
+    let dispatch = useDispatch();
     let user = useSelector((state)=>state.user);
+
+    let renderMenuButton = ()=>{
+        if(user === null){
+            return <><Button redButton label='Show Menu' onClick={()=>history.push("/customer")}/></>;
+        }
+        else if(user.role === 2){
+            return <><Button redButton label='Show Menu' onClick={()=>history.push("/customer")}/></>;
+        }
+        else if(user.role === 1){
+            return <><Button redButton label='Cashier Dashboard' onClick={()=>history.push("/cashier")}/></>;
+        }
+        else if(user.role === 0){
+            return <><Button redButton label='Admin Dashboard' onClick={()=>history.push("/admin")}/></>;
+        }
+    }
 
     return (
 
@@ -24,10 +41,11 @@ export default function Welcome(){
                         
                         <div className='row'>
                             <div className='col-md-12 col-lg-6' style={{marginTop:"30px"}}>
-                                <Button redButton label='Show Menu' onClick={()=>history.push("/customer")}/>
+                                {renderMenuButton()}
                             </div>
+
                             <div className='col-md-12 col-lg-6' style={{marginTop:"30px"}}>
-                                {user === null ?  <Button whiteButton label='Login'/> : null}
+                                {user === null ?  <Button whiteButton label='Login' onClick={()=>history.push("/login")}/> : <Button whiteButton label='Logout' onClick={()=>dispatch(signOut())}/>}
                             </div>
                         </div>
 

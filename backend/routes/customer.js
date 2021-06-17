@@ -125,17 +125,23 @@ router.post("/orderFood", auth, async(req, res) => {
 });
 //getFoodOfTheDay
 
+router.post("/getOrderStatus", auth, async(req, res) => {
+    try {
+        const order = await Order.findOne({_id:req.body._id})
+        res.send(order);
+    }
+    catch(ex) {
+        console.log(ex.message);
+        res.status(500).send(ex.message);
+    }
+
+});
 
 //view active order details
-router.get("/activeOrders", auth, async(req, res) => {
+router.post("/activeOrders", auth, async(req, res) => {
     try {
-
-        let currentUser = await User.findOne({phone: req.body.phone});
-        if (!currentUser) { return res.status(400).send("Customer does not exist"); }
-
-        console.log(currentUser._id);
-
-        const orders = await Order.find({ user: {_id: currentUser._id, name: currentUser.name}, status : ["Queued", "Cooking"] })
+        console.log(req.user._id);
+        const orders = await Order.find({user_id: req.user._id,status:["Queued","Cooking"]})
             .sort({ date : 1 })
             .lean();
     

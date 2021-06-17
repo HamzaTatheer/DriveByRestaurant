@@ -17,6 +17,8 @@ function Login(props) {
   let [password, setPassword] = useState("");
 
   let submitForm = () => {
+    console.log(phone);
+    console.log(password);
 
     axios.post('/api/user/login',{
       phone:phone,

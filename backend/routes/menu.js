@@ -29,13 +29,13 @@ router.get("/orderOfTheDay", async(req, res) => {
 	end.setHours(23,59,59,999);
 
 	try {
-		let orders = await Order.find({date: {$gte: start, $lt: end}}).select("fooditems.name");
+		let orders = await Order.find({date: {$gte: start, $lt: end}}).select("fooditems._id");
 
 		items = [];
 		orders.map(elem => {
 		let food_items = elem.fooditems;
 			food_items.map(item => {
-				items.push(item.name);
+				items.push(item._id);
 			});
 		});
 		items.sort();
@@ -46,7 +46,7 @@ router.get("/orderOfTheDay", async(req, res) => {
 		});
 		
 		let highestOrderedItem = Object.keys(count).reduce((a, b) => count[a] > count[b] ? a : b);
-		let foodObject = await FoodItem.find({name: highestOrderedItem});
+		let foodObject = await FoodItem.find({_id: highestOrderedItem});
 
 		res.send(foodObject);
 	} 
