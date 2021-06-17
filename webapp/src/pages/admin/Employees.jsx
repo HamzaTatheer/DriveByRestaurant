@@ -5,6 +5,7 @@ import ProfileHeader from "../../components/ProfileHeader";
 import Burger from "../../../src/assets/customer/salad.png";
 import PopUpEmployees from "./PopUpEmployees";
 import { axios_authenticated as axios } from "../../axios/axios-config";
+import baseUrl from "../../utilities/baseUrl";
 function Employees(props) {
   let [employees, setEmployees] = useState([]);
   useEffect(() => {
@@ -47,7 +48,6 @@ function Employees(props) {
     formData.append("name", item.name);
     formData.append("phone", item.phoneNo);
     formData.append("password", item.password);
-    setEmployees([...employees, newitem]);
 
     axios
       .post("api/admin/addCashier", formData, {
@@ -56,7 +56,9 @@ function Employees(props) {
         },
       })
       .then((res) => {
-        console.log(res);
+        newitem.id = res.data._id;
+        newitem.image = res.data.avatar;
+        setEmployees([...employees, newitem]);
       })
       .catch((err) => {
         console.log(err);
@@ -85,11 +87,13 @@ function Employees(props) {
   return (
     <div>
       <ProfileHeader />
-      <div style={{ display: "flex", paddingTop: "30px" }}>
+      <div
+        style={{ display: "flex", alignItems: "baseline", paddingTop: "30px" }}
+      >
         <div style={{ flex: "50%", paddingLeft: "30px" }}>
           <h1 style={{ fontWeight: "bold" }}>Cashiers</h1>
         </div>
-        <div style={{ flex: "50%", paddingRight: "30px" }}>
+        <div style={{ paddingRight: "30px" }}>
           <Button
             onClick={() => handleClickOpen()}
             blackButton
@@ -116,7 +120,11 @@ function Employee({ item, onDelete }) {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div style={{ flex: "25%", paddingTop: "50px", paddingLeft: "30px" }}>
-        <img style={{ width: "150px" }} src={item.image} alt="" />
+        <img
+          style={{ width: "150px" }}
+          src={`${baseUrl}/public/uploads/profile_pictures/${item.image}`}
+          alt=""
+        />
       </div>
       <div style={{ flex: "50%", fontWeight: "bold", paddingTop: "50px" }}>
         <p>Name: {item.name}</p>

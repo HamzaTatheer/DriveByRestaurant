@@ -27,11 +27,13 @@ router.post(
       const { error } = validateSignup(req.body, 1); //1 is cashier role
 
       if (error) {
+        console.log("validation error");
         return res.status(400).send(error.details[0].message);
       }
 
       let user = await User.findOne({ phone: req.body.phone });
       if (user) {
+        console.log("already registered");
         return res.status(400).send("Cashier is already registered");
       }
 

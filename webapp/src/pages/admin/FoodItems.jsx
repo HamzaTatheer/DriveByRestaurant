@@ -13,6 +13,7 @@ import ProfileHeader from "../../components/ProfileHeader";
 import Burger from "../../../src/assets/customer/burger.png";
 import PopUpFoodItem from "./PopUpFoodItem";
 import { axios_authenticated as axios } from "../../axios/axios-config";
+import baseUrl from "../../utilities/baseUrl";
 function FoodItems(props) {
   const [open, setOpen] = React.useState(false);
 
@@ -53,9 +54,32 @@ function FoodItems(props) {
   }, []);
 
   function handleSave(item) {
-    let newitem = { ...item, id: 5, image: Burger };
+    let newitem = { ...item };
+    newitem.category = item.catname;
     console.log(newitem);
-    setFoodItems((fooditems) => [...fooditems, newitem]);
+    let formData = new FormData();
+    formData.append("name", item.name);
+    formData.append("price", item.price);
+    formData.append("category", item.cat);
+    formData.append("description", item.description);
+    formData.append("avatar", item.image);
+    formData.append("ingredients", []);
+
+    axios
+      .post("api/admin/addFoodItem", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        newitem.id = res.data._id;
+        newitem.image = res.data.avatar;
+        setFoodItems([...fooditems, newitem]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     handleClose();
   }
   function removeItem(item) {
@@ -76,11 +100,13 @@ function FoodItems(props) {
   return (
     <div>
       <ProfileHeader />
-      <div style={{ display: "flex", paddingTop: "30px" }}>
+      <div
+        style={{ display: "flex", alignItems: "baseline", paddingTop: "30px" }}
+      >
         <div style={{ flex: "50%", paddingLeft: "30px" }}>
           <h1 style={{ fontWeight: "bold" }}>Food Items</h1>
         </div>
-        <div style={{ flex: "50%", paddingRight: "30px" }}>
+        <div style={{ paddingRight: "30px" }}>
           <Button
             onClick={() => handleClickOpen()}
             blackButton
@@ -108,7 +134,11 @@ function FoodItem({ item, onDelete }) {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div style={{ flex: "25%", paddingTop: "50px", paddingLeft: "30px" }}>
-        <img style={{ width: "150px" }} src={item.image} alt="" />
+        <img
+          style={{ width: "150px" }}
+          src={`${baseUrl}/public/uploads/food_pictures/${item.image}`}
+          alt=""
+        />
       </div>
       <div style={{ flex: "50%", fontWeight: "bold", paddingTop: "50px" }}>
         <p>Name: {item.name}</p>
