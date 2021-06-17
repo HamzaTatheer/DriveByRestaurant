@@ -95,8 +95,10 @@ function MenuScreen(props) {
 
   useEffect(()=>{
     axios.post("/api/menu/orderOfTheDay").then(({data})=>{
-      setBestOrder({avatar:data.avatar,name:data.name,price:data.price});
-      setOpen(true);
+      if(data.length>0){
+        setBestOrder({avatar:data[0].avatar,name:data[0].name,price:data[0].price});
+        setOpen(true);
+      }
     })
   },[setBestOrder])
 
