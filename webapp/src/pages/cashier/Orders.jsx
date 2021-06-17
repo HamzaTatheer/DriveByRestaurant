@@ -3,79 +3,86 @@ import ProfileHeader from "../../components/ProfileHeader";
 import Button from "../../components/Button";
 import "../../index.css";
 import io from "socket.io-client";
-import {axios_authenticated as axios} from "../../axios/axios-config";
+import calculateQuantity from "../../utilities/calculateQuantity";
+import { axios_authenticated as axios } from "../../axios/axios-config";
 
 export default function Orders(props) {
-
   let [orders, setOrders] = useState([]);
 
+  const socket = io("http://localhost:9001", { reconnectionDelayMax: 10000 });
+  useEffect(() => {
+    socket.on(
+      "status_change",
+      () => {
+        axios
+          .get("/api/cashier/orderHistory")
+          .then((res) => {
+            console.log(res.data);
+            setOrders([]);
+            axios
+              .get("/api/cashier/orderHistory")
+              .then((res) => {
+                console.log(res.data);
 
+                setOrders(
+                  res.data.map((val, index) => {
+                    return {
+                      orderNo: val._id,
+                      foodItems: calculateQuantity(val.fooditems),
+                      total: val.bill,
+                      status: val.status,
+                    };
+                  })
+                );
+              })
+              .catch((err) => {
+                alert("There are new updates in order history");
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+      []
+    );
 
-  const socket = io("http://localhost:9001", {reconnectionDelayMax: 10000});
-  useEffect(()=>{
+    return () => {
+      socket.off("status_change");
+    };
+  }, [socket, setOrders]);
 
-    socket.on("status_change",()=>{
-      axios.get("/api/cashier/orderHistory").then((res)=>{
+  let sendStatusUpdate = (id, status) => {
+    axios
+      .post("/api/cashier/updateStatus", { orderId: id, status: status })
+      .then(() => {
+        socket.emit("status_change", { order_id: id, order_status: status });
+      })
+      .catch(() => {
+        alert("Not Possible");
+      });
+  };
+
+  useEffect(() => {
+    axios
+      .get("/api/cashier/orderHistory")
+      .then((res) => {
         console.log(res.data);
-        setOrders([])
-        axios.get("/api/cashier/orderHistory").then((res)=>{
-          console.log(res.data);
-
-          setOrders(res.data.map((val,index)=>{
+        setOrders(
+          res.data.map((val, index) => {
             return {
-              orderNo:val._id,
-              foodItems:val.fooditems.map((item)=>{
-                return {name:item.name,price:item.price,quantity:3}
-              }),
-              total:val.bill,
-              status:val.status
-            }
-          }))
-        }).catch((err)=>{
-          alert("There are new updates in order history");
-          console.log(err);
-        });
-      }).catch((err)=>{
-
+              orderNo: val._id,
+              foodItems: calculateQuantity(val.fooditems),
+              total: val.bill,
+              status: val.status,
+            };
+          })
+        );
+      })
+      .catch((err) => {
         console.log(err);
       });
-    },[])
-
-    return ()=>{
-      socket.off("status_change");
-    }
-
-  },[socket,setOrders])
-
-  let sendStatusUpdate = (id,status)=>{
-    axios.post("/api/cashier/updateStatus",{orderId:id,status:status}).then(()=>{
-      socket.emit("status_change",{order_id:id,order_status:status});
-    }).catch(()=>{
-      alert("Not Possible");
-    })
-  }
-
-
-
-
-
-  useEffect(()=>{
-    axios.get("/api/cashier/orderHistory").then((res)=>{
-      console.log(res.data);
-      setOrders(res.data.map((val,index)=>{
-        return {
-          orderNo:val._id,
-          foodItems:val.fooditems.map((item)=>{
-            return {name:item.name,price:item.price,quantity:3}
-          }),
-          total:val.bill,
-          status:val.status
-        }
-      }))
-    }).catch((err)=>{
-      console.log(err);
-    });
-  },[])
+  }, []);
 
   const [stylz, setStylz] = useState(null);
   console.log(orders);
@@ -90,12 +97,15 @@ export default function Orders(props) {
       </ProfileHeader>
       <h1 style={{ marginTop: "60px", marginLeft: "60px" }}>Orders</h1>
       {orders.map((item) => (
-        <OrderBox item={item} sendStatusUpdate={(id,status)=>sendStatusUpdate(id,status)}/>
+        <OrderBox
+          item={item}
+          sendStatusUpdate={(id, status) => sendStatusUpdate(id, status)}
+        />
       ))}
     </div>
   );
 }
-function OrderBox({ sendStatusUpdate,item }) {
+function OrderBox({ sendStatusUpdate, item }) {
   /*  const [click, setClick] = useState(true);
   useEffect(() => {
     console.log("item:", item);
@@ -103,12 +113,12 @@ function OrderBox({ sendStatusUpdate,item }) {
   }, [click]); */
   let [myState, setMyState] = useState(item);
 
-  function Clicked(orderNo,status) {
+  function Clicked(orderNo, status) {
     console.log("Clicked!", myState);
     let newState = { ...myState };
     newState.status = status;
     setMyState(newState);
-    sendStatusUpdate(orderNo,status);
+    sendStatusUpdate(orderNo, status);
   }
 
   return (
@@ -128,7 +138,7 @@ function OrderBox({ sendStatusUpdate,item }) {
           <div style={{ marginTop: "10px" }}>
             {" "}
             <Button
-              onClick={() => Clicked(myState.orderNo,"Queued")}
+              onClick={() => Clicked(myState.orderNo, "Queued")}
               mystyle={{ width: "50%", height: "20%" }}
               redButton={myState.status === "Queued"}
               blackButton={myState.status !== "Queued"}
@@ -138,7 +148,7 @@ function OrderBox({ sendStatusUpdate,item }) {
           <div style={{ marginTop: "10px" }}>
             {" "}
             <Button
-              onClick={() => Clicked(myState.orderNo,"Cooking")}
+              onClick={() => Clicked(myState.orderNo, "Cooking")}
               mystyle={{ width: "50%", height: "20%" }}
               redButton={myState.status === "Cooking"}
               blackButton={myState.status !== "Cooking"}
@@ -148,7 +158,7 @@ function OrderBox({ sendStatusUpdate,item }) {
           <div style={{ marginTop: "10px" }}>
             {" "}
             <Button
-              onClick={() => Clicked(myState.orderNo,"Ready")}
+              onClick={() => Clicked(myState.orderNo, "Ready")}
               mystyle={{ width: "50%", height: "20%" }}
               redButton={myState.status === "Ready"}
               blackButton={myState.status !== "Ready"}
