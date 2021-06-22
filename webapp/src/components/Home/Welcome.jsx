@@ -44,7 +44,7 @@ export default function Welcome(){
                                 {renderMenuButton()}
                             </div>
 
-                            <div className='col-md-12 col-lg-6' style={{marginTop:"30px"}}>
+                            <div className='col-md-12 col-lg-6' style={{marginTop:"30px",textAlign:"center"}}>
                                 {user === null ?  <Button whiteButton label='Login' onClick={()=>history.push("/login")}/> : <Button whiteButton label='Logout' onClick={()=>dispatch(signOut())}/>}
                             </div>
                         </div>
