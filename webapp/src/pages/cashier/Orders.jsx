@@ -110,7 +110,7 @@ export default function Orders(props) {
       </select>
 
       {orders
-        .filter((val) => (category !== "" ? val.status == category : true))
+        .filter((val) => (category !== "" ? val.status == category : true)).sort((val)=>val.status === 'Queued' ? 20 : 10)
         .map((item) => (
           <OrderBox
             item={item}
