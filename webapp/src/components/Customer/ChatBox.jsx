@@ -51,7 +51,7 @@ function ChatSystem(props){
         //d = JSON.parse(d);
         console.log(d);
         //setHistory(hist=>[...hist,{id:d.id,phone:d.phone,role:d.role,message:d.message}])
-        if(user.role===1)//is cashier so see all messages
+        if(user.role===1 && user.id !== d.id)//is cashier so see all messages
           setHistory(hist=>[...hist,{id:d.id,name:d.name,role:d.role,message:d.message}]);
         else if(user.role===2)//is customer see only some messages
         {
