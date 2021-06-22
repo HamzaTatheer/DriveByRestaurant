@@ -31,12 +31,12 @@ export default function Welcome(){
             <div className="text-sm-center text-md-center text-lg-left" style={{background:"#696060",minHeight:"60vh",paddingTop:"100px",paddingBottom:"50px"}}>
                 <div className="row overflow-hidden align-items-center">
                     <div className='col-md-12 col-lg-5'>
-                        <img src={img} alt="Salad Picture" style={{wdith:"85%"}}/>
+                        <img src={img} alt="Salad Picture" width="96%"/>
                     </div>
                     <div className='col-md-12 col-lg-5'>
                        
                         
-                        <h1 style={{color:'white'}}>Delicous Food is waiting for you</h1>
+                        <h1 style={{color:'white',textAlign:"center"}}>Delicous food is waiting for you</h1>
                         
                         
                         <div className='row'>
