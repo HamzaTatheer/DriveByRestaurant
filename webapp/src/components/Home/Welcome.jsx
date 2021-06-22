@@ -39,7 +39,7 @@ export default function Welcome(){
                         <h1 style={{color:'white',textAlign:"center"}}>Delicous food is waiting for you</h1>
                         
                         
-                        <div className='row'>
+                        <div className='row' style={{textAlign:"center"}}>
                             <div className='col-md-12 col-lg-6' style={{marginTop:"30px"}}>
                                 {renderMenuButton()}
                             </div>

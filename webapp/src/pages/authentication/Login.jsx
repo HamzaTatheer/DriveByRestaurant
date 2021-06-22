@@ -73,7 +73,7 @@ function Login(props) {
                   Dont have a account ?{" "}
                 </p>
                 <small>
-                  <a href="/" style={{ display: "inline" }}>
+                  <a onClick={()=>history.push("/signup")} style={{ display: "inline" }}>
                     Create New
                   </a>
                 </small>
