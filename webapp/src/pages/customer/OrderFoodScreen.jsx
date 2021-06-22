@@ -21,6 +21,7 @@ import { setOrder, removeOrder } from "../../redux/actions/orderAction";
 import { clearCart } from "../../redux/actions/cartAction";
 import { useDispatch } from "react-redux";
 import io from "socket.io-client";
+import socketUrl from "../../utilities/socketUrl";
 
 function MenuScreen(props) {
   let history = useHistory();
@@ -299,7 +300,7 @@ function Status(props) {
   //side case. if status is Done
   //go to next page i.e order history
 
-  const socket = io("http://localhost:9001", { reconnectionDelayMax: 10000 });
+  const socket = io(socketUrl, { reconnectionDelayMax: 10000 });
   useEffect(() => {
     socket.on("status_change", (d) => {
       //d = JSON.parse(d);

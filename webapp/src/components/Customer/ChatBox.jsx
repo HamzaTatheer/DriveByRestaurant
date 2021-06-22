@@ -2,7 +2,7 @@ import React,{useRef,useEffect,useState, useCallback} from "react";
 import Input from "../ChatInput";
 import {useReducer, useSelector} from "react-redux";
 import io from "socket.io-client";
-
+import socketUrl from "../../utilities/socketUrl";
 
 
 
@@ -44,7 +44,7 @@ function ChatSystem(props){
     let [history,setHistory] = useState([]);
     let [text,setText] = useState("");
 
-    const socket = io("http://localhost:9001", {reconnectionDelayMax: 10000});
+    const socket = io(socketUrl, {reconnectionDelayMax: 10000});
 
     useEffect(()=>{
       socket.on("message",(d)=>{

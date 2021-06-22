@@ -5,11 +5,13 @@ import "../../index.css";
 import io from "socket.io-client";
 import calculateQuantity from "../../utilities/calculateQuantity";
 import { axios_authenticated as axios } from "../../axios/axios-config";
+import socketUrl from "../../utilities/socketUrl";
+
 
 export default function Orders(props) {
   let [orders, setOrders] = useState([]);
 
-  const socket = io("http://localhost:9001", { reconnectionDelayMax: 10000 });
+  const socket = io(socketUrl, { reconnectionDelayMax: 10000 });
   useEffect(() => {
     socket.on(
       "status_change",

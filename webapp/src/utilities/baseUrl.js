@@ -1,2 +1,2 @@
-const url = "http://localhost:3008"
+const url = process.env.baseUrl ?  process.env.baseUrl : "http://localhost:3008";
 export default url;
