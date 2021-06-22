@@ -80,7 +80,6 @@ function ChatSystem(props){
       if(user.role === 1){
         let firstPart = text.substr(0,text.indexOf(' '));
         let secondPart = text.substr(text.indexOf(' ')+1);
-        alert("Sending");
         socket.emit("message",{id:user.id,role:user.role,name:user.phone,message:secondPart,to:firstPart});
       }
       else if(user.role===2){
