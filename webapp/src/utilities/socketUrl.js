@@ -1,2 +1,2 @@
-const socketUrl = process.env.socketUrl ? process.env.socketUrl : "https://b1ca878fa9a0.ngrok.io";
+const socketUrl = process.env.socketUrl ? process.env.socketUrl : "https://f7fb6fdf510d.ngrok.io";
 export default socketUrl;
