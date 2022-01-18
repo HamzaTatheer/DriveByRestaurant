@@ -1,4 +1,4 @@
-# SoftwareEngineeringProject
+# Driveby Restaurant Webapp - Software Engineering Project
 
 <img src='https://github.com/HamzaTatheer/SoftwareEngineeringProject/blob/main/misc/demo.png?raw=true'>
 <div style="display:inline">
