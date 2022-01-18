@@ -1,5 +1,12 @@
 # SoftwareEngineeringProject
 
+<img src='https://github.com/HamzaTatheer/SoftwareEngineeringProject/blob/main/misc/demo.png?raw=true'>
+<div style="display:inline">
+<img src='https://github.com/HamzaTatheer/SoftwareEngineeringProject/blob/main/misc/menu.png?raw=true' width = '200px' height='112px' />
+<img src='https://github.com/HamzaTatheer/SoftwareEngineeringProject/blob/main/misc/checkout.png?raw=true' width = '200px' height='112px' />
+<img src='https://github.com/HamzaTatheer/SoftwareEngineeringProject/blob/main/misc/Customer%20Panel%20-%20Status.png?raw=true' width='200px' />
+<img src='https://github.com/HamzaTatheer/SoftwareEngineeringProject/blob/main/misc/Customer%20Panel%20_chat.png?raw=true' width = '200px' />
+</div>
 
 # Running the backend
 
