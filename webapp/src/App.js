@@ -18,6 +18,7 @@ import DeliveryPage from "./pages/cashier/";
 function App() {
   return (
     <div className="App">
+
       <Router>
         <Switch>
           <Route exact path="/signup" component={SignUp} />
