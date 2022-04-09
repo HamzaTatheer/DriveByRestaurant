@@ -1,1 +1,15 @@
+
 backend/node_modules/
+
+backend/public/food_pictures/*
+!backend/public/food_pictures/avatar1649497833886.jpeg
+!backend/public/food_pictures/avatar1649497900550.jpeg
+
+backend/public/profile_pictures/*
+!backend/public/profile_pictures/avatar1624392773203.jpg
+!backend/public/profile_pictures/avatar1649439648053.jpg
+!backend/public/profile_pictures/avatar1649498134531.jpeg
+!backend/public/profile_pictures/avatar1624393540695.jpg
+!backend/public/profile_pictures/avatar1649498054784.jpg
+
+webapp/node_modules/

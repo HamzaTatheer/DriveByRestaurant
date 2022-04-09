@@ -1,0 +1,37 @@
+[{
+  "_id": {
+    "$oid": "625156eae01dec6e20d65c54"
+  },
+  "ingredients": [
+    ""
+  ],
+  "name": "Chunky Burger",
+  "price": 3000,
+  "category": {
+    "_id": {
+      "$oid": "625156eae01dec6e20d65c55"
+    },
+    "name": "spicy food"
+  },
+  "description": "Spicy and tasty",
+  "avatar": "avatar1649497833886.jpeg",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6251572ce01dec6e20d65c56"
+  },
+  "ingredients": [
+    ""
+  ],
+  "name": "Pepsi",
+  "price": 100,
+  "category": {
+    "_id": {
+      "$oid": "6251572ce01dec6e20d65c57"
+    },
+    "name": "drinks"
+  },
+  "description": "Enjoy food with pepsi",
+  "avatar": "avatar1649497900550.jpeg",
+  "__v": 0
+}]

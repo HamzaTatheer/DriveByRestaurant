@@ -1,2 +1,2 @@
-const url = process.env.REACT_APP_BASE_URL ?  process.env.REACT_APP_BASE_URL : "https://f7fb6fdf510d.ngrok.io";
+const url = "http://localhost:3000";
 export default url;

@@ -8,13 +8,24 @@
 <img src='https://github.com/HamzaTatheer/SoftwareEngineeringProject/blob/main/misc/Customer%20Panel%20_chat.png?raw=true' width = '200px' />
 </div>
 
+Note: Run Backend First and then frontend due to some port issues. Say yes if React wants to use some other port as current is already being used (To Be Resolved)
+
+
+# Setting up database
+
+ Raw pictures for database are already part of repo so all you need to do is import collections.
+
+ Go to mongodb_setup. Create database of your choice of name and then import these collections.
+
+ Database url will most probably be mongodb://localhost:27017/yourDatabaseName (assuming no login required). This will be needed later when setting up backend.
+
 # Running the backend
 
 - cd into the ~/backend folder.
 
 - create a file inside backend called .env if not already created and add these
 
-    DB_URL='mongodb://root:example@localhost:27017'
+    DB_URL='mongodb://localhost:27017/restaurant'
     JWT_PRIVATE_KEY='SEproj_jwtPrivateKey'
     PORT=3000
 

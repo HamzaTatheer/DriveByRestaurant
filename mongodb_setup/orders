@@ -1,0 +1,147 @@
+[{
+  "_id": {
+    "$oid": "62515861e01dec6e20d65c5e"
+  },
+  "status": "Ready",
+  "user_id": {
+    "$oid": "625073a0e01dec6e20d65c51"
+  },
+  "user_name": "omarakmal",
+  "bill": 3100,
+  "fooditems": [
+    {
+      "ingredients": [
+        ""
+      ],
+      "_id": {
+        "$oid": "625156eae01dec6e20d65c54"
+      },
+      "name": "Chunky Burger",
+      "price": 3000,
+      "category": {
+        "_id": {
+          "$oid": "625156eae01dec6e20d65c55"
+        },
+        "name": "spicy food"
+      },
+      "description": "Spicy and tasty",
+      "avatar": "avatar1649497833886.jpeg",
+      "__v": 0
+    },
+    {
+      "ingredients": [
+        ""
+      ],
+      "_id": {
+        "$oid": "6251572ce01dec6e20d65c56"
+      },
+      "name": "Pepsi",
+      "price": 100,
+      "category": {
+        "_id": {
+          "$oid": "6251572ce01dec6e20d65c57"
+        },
+        "name": "drinks"
+      },
+      "description": "Enjoy food with pepsi",
+      "avatar": "avatar1649497900550.jpeg",
+      "__v": 0
+    }
+  ],
+  "date": {
+    "$date": "2022-04-09T09:56:49.429Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62515b23e01dec6e20d65c88"
+  },
+  "status": "Ready",
+  "user_id": {
+    "$oid": "625073a0e01dec6e20d65c51"
+  },
+  "user_name": "faizan",
+  "bill": 12000,
+  "fooditems": [
+    {
+      "ingredients": [
+        ""
+      ],
+      "_id": {
+        "$oid": "625156eae01dec6e20d65c54"
+      },
+      "name": "Chunky Burger",
+      "price": 3000,
+      "category": {
+        "_id": {
+          "$oid": "625156eae01dec6e20d65c55"
+        },
+        "name": "spicy food"
+      },
+      "description": "Spicy and tasty",
+      "avatar": "avatar1649497833886.jpeg",
+      "__v": 0
+    },
+    {
+      "ingredients": [
+        ""
+      ],
+      "_id": {
+        "$oid": "625156eae01dec6e20d65c54"
+      },
+      "name": "Chunky Burger",
+      "price": 3000,
+      "category": {
+        "_id": {
+          "$oid": "625156eae01dec6e20d65c55"
+        },
+        "name": "spicy food"
+      },
+      "description": "Spicy and tasty",
+      "avatar": "avatar1649497833886.jpeg",
+      "__v": 0
+    },
+    {
+      "ingredients": [
+        ""
+      ],
+      "_id": {
+        "$oid": "625156eae01dec6e20d65c54"
+      },
+      "name": "Chunky Burger",
+      "price": 3000,
+      "category": {
+        "_id": {
+          "$oid": "625156eae01dec6e20d65c55"
+        },
+        "name": "spicy food"
+      },
+      "description": "Spicy and tasty",
+      "avatar": "avatar1649497833886.jpeg",
+      "__v": 0
+    },
+    {
+      "ingredients": [
+        ""
+      ],
+      "_id": {
+        "$oid": "625156eae01dec6e20d65c54"
+      },
+      "name": "Chunky Burger",
+      "price": 3000,
+      "category": {
+        "_id": {
+          "$oid": "625156eae01dec6e20d65c55"
+        },
+        "name": "spicy food"
+      },
+      "description": "Spicy and tasty",
+      "avatar": "avatar1649497833886.jpeg",
+      "__v": 0
+    }
+  ],
+  "date": {
+    "$date": "2022-04-09T10:08:35.980Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,41 @@
+[{
+  "_id": {
+    "$oid": "625073a0e01dec6e20d65c51"
+  },
+  "role": 2,
+  "name": "faizan",
+  "password": "$2a$10$Wnfp228qXld2FDuSBP.r.eqL.78Gboc4AFzTtrO20wG3LKbJpamNm",
+  "phone": "03040392819",
+  "avatar": "avatar1649439648053.jpg",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6250744675d81c2e6c19f222"
+  },
+  "role": 0,
+  "name": "omarakmal",
+  "password": "$2a$10$Wnfp228qXld2FDuSBP.r.eqL.78Gboc4AFzTtrO20wG3LKbJpamNm",
+  "phone": "03000000000",
+  "avatar": "avatar1624393540695.jpg",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "625157c6e01dec6e20d65c58"
+  },
+  "role": 1,
+  "name": "Jaani",
+  "password": "$2a$10$ZPlUZPsX4uXkuvpY3WhhweUfnCqwy9N5rUR5t8g/mjEHMbHGD8Qz.",
+  "phone": "03006969690",
+  "avatar": "avatar1649498054784.jpg",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62515816e01dec6e20d65c59"
+  },
+  "role": 1,
+  "name": "baani",
+  "password": "$2a$10$iaW0cvesipYtqOK5iqgGNep40wu0CTpDRaoC4GffkbvdS23.UQZNu",
+  "phone": "03008908966",
+  "avatar": "avatar1649498134531.jpeg",
+  "__v": 0
+}]
