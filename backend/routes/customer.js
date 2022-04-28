@@ -26,11 +26,9 @@ router.post("/signup",upload.single('avatar'), async(req, res) => {
         user_data.avatar = req.file ? req.file.filename : null;
         user_data.role = 2;
         user = new User(user_data);
-      
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
         await user.save();
-
         const token = user.generateAuthToken();
         res.header("access_token", token).send(_.pick(user,["name", "_id", "role", "avatar"]));
     }
