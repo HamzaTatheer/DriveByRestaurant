@@ -2,6 +2,7 @@ const { validateFoodItems } = require("../models/fooditem");
 const { getBill } = require("../routes/supporting_methods/customer");
 const { getHighestOrderItem } = require("../routes/supporting_methods/menu");
 const { validateCategory } = require("../models/category");
+const { validateFeedback } = require("../models/feedback");
 
 test("Calculate Total Bill", () => {
   const food_items = [
@@ -23,7 +24,7 @@ test("Calculate Total Bill", () => {
   expect(total).toBe(6100);
 });
 
-test("Invalid food item name", () => {
+test("Validate Food Item", () => {
   let item = {
     name: ".",
     price: 3000,
@@ -34,10 +35,8 @@ test("Invalid food item name", () => {
 
   let validation = validateFoodItems(item);
   expect(validation.error.details.length).toBeGreaterThan(0);
-});
 
-test("Invalid foot item price", () => {
-  let item = {
+  item = {
     name: "Burger",
     price: -1,
     category: { name: "Spicy and tasty" },
@@ -45,7 +44,7 @@ test("Invalid foot item price", () => {
     description: "Very nice food",
   };
 
-  let validation = validateFoodItems(item);
+  validation = validateFoodItems(item);
   expect(validation.error.details.length).toBeGreaterThan(0);
 });
 
@@ -75,13 +74,42 @@ test("Get most ordered item", () => {
   expect(highestItem).toBe("625156eae01dec6e20d65c54");
 });
 
-test("Null category", () => {
+test("category validation", () => {
   let cat = {
     _id: "625156a7e01dec6e20d65c52",
     name: null,
   };
 
   let validation = validateCategory(cat);
-  console.log(validation);
+  expect(validation.error.details.length).toBeGreaterThan(0);
+
+  cat = {
+    _id: "625156a7e01dec6e20d65c52",
+    name: ".",
+  };
+
+  validation = validateCategory(cat);
+  expect(validation.error.details.length).toBeGreaterThan(0);
+});
+
+test("feedback validation", () => {
+  let feedback = {
+    user: { name: "haissam" },
+    order: { bill: 1000 },
+    rating: -1,
+    message: "Order was really poor",
+  };
+
+  let validation = validateFeedback(feedback);
+  expect(validation.error.details.length).toBeGreaterThan(0);
+
+  feedback = {
+    user: { name: "haissam" },
+    order: { bill: 1000 },
+    rating: 3,
+    message: null,
+  };
+
+  validation = validateFeedback(feedback);
   expect(validation.error.details.length).toBeGreaterThan(0);
 });
