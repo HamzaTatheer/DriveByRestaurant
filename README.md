@@ -15,9 +15,9 @@ Note: Run Backend First and then frontend due to some port issues. Say yes if Re
 
  Raw pictures for database are already part of repo so all you need to do is import collections.
 
- Go to mongodb_setup. Create database of your choice of name and then import these collections.
-
- Database url will most probably be mongodb://localhost:27017/yourDatabaseName (assuming no login required). This will be needed later when setting up backend.
+ - Create database of your choice of name on MongoDB atlast (or shell), Database url will most probably be mongodb://localhost:27017/yourDatabaseName (assuming no login required in url). This will be needed later when setting up backend.
+ 
+ - import the collections present in mongodb_setup to your created database. This will be the initial setup. Password for users is 123123123123. Look at user login details by browsing through mongodb atlas
 
 # Running the backend
 
