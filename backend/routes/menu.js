@@ -6,53 +6,39 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-const {FoodItem} = require("../models/fooditem");
-const {Order} = require("../models/order");
+const { FoodItem } = require("../models/fooditem");
+const { Order } = require("../models/order");
+const { getHighestOrderItem } = require("./supporting_methods/menu");
 
-router.get("/menu", async(req, res) => {
-	try {
-		let fooditems = await FoodItem.find({}).sort("name");
-		res.send(fooditems);
-	}
-	catch (ex) {
-		console.log(ex.message);
-		res.status(400).send("Request Invalid");
-	}
+router.get("/menu", async (req, res) => {
+  try {
+    let fooditems = await FoodItem.find({}).sort("name");
+    res.send(fooditems);
+  } catch (ex) {
+    console.log(ex.message);
+    res.status(400).send("Request Invalid");
+  }
 });
 
-router.get("/orderOfTheDay", async(req, res) => {
+router.get("/orderOfTheDay", async (req, res) => {
+  var start = new Date();
+  start.setHours(0, 0, 0, 0);
 
-	var start = new Date();
-	start.setHours(0,0,0,0);
+  var end = new Date();
+  end.setHours(23, 59, 59, 999);
 
-	var end = new Date();
-	end.setHours(23,59,59,999);
+  try {
+    let orders = await Order.find({ date: { $gte: start, $lt: end } }).select(
+      "fooditems._id"
+    );
 
-	try {
-		let orders = await Order.find({date: {$gte: start, $lt: end}}).select("fooditems._id");
+    let highestOrderedItem = getHighestOrderItem(orders);
+    let foodObject = await FoodItem.find({ _id: highestOrderedItem });
 
-		items = [];
-		orders.map(elem => {
-		let food_items = elem.fooditems;
-			food_items.map(item => {
-				items.push(item._id);
-			});
-		});
-		items.sort();
-
-		let count = {};
-		items.forEach(function(i) { 
-			count[i] = (count[i]||0) + 1;
-		});
-		
-		let highestOrderedItem = Object.keys(count).reduce((a, b) => count[a] > count[b] ? a : b);
-		let foodObject = await FoodItem.find({_id: highestOrderedItem});
-
-		res.send(foodObject);
-	} 
-	catch (ex) {
-		console.log(ex.message);
-	}
+    res.send(foodObject);
+  } catch (ex) {
+    console.log(ex.message);
+  }
 });
 
 module.exports = router;
