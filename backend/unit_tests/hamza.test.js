@@ -8,6 +8,8 @@ describe("user login",()=>{
     //     await require("../startup/db")();
     // })
 
+    
+
     it("Correct User Credentials",async ()=>{
         const result = validateLogin({ phone:"03001928199",password:"1231231231"});     
         expect(result.error).toBeFalsy();

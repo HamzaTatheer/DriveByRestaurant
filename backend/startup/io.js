@@ -34,10 +34,7 @@ module.exports = function (app) {
 
   });
 
+  return server;
 
-  let port = process.env.SOCKET_PORT || 9000;
-  server.listen(port, () => {
-    console.log(`Socket IO Server has started lisenting on port ${port}`);
-  });
 
 };

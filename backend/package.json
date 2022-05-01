@@ -4,7 +4,7 @@
   "description": "add basic guide in README.md",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "NODE_ENV= jest",
     "start": "nodemon index.js"
   },
   "keywords": [],
@@ -26,6 +26,7 @@
     "socket.io": "^4.1.2"
   },
   "devDependencies": {
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "supertest": "^6.2.3"
   }
 }
