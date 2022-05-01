@@ -3,6 +3,7 @@ const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+let {hashPassword} = require("./supporting_methods/auth_utils");
 
 const auth = require("../middleware/auth");
 const { User, validateLogin, validateSignup } = require("../models/user");
@@ -55,7 +56,7 @@ router.post("/changePassword", auth, async (req, res) => {
       return res.status(300).send("New Passwords donot match...");
 
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(req.body.newPassword, salt);
+    user.password = await hashPassword(req.body.newPassword, salt);
     console.log(user);
 
     const newUser = await User.findByIdAndUpdate(
