@@ -167,6 +167,7 @@ router.post("/addCategory", auth, async (req, res) => {
     if (req.user.role != 0) return res.status(403).send("Access Denied");
 
     const { error } = validateCategory(req.body);
+    console.log(error);
 
     if (error) return res.status(400).send(error.details[0].message);
 
