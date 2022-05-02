@@ -37,6 +37,13 @@ export default function ProfileSettings() {
             redButton
             label="Save"
             onClick={() => {
+
+              if(name.trim() ===""){
+                alert("Invalid Name Entered. Please Try Again")
+                return;
+              }
+
+
               axios
                 .post("/api/user/changeUserName", {
                   name: name,
