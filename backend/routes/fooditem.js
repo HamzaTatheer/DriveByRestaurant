@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 router.post("/fooditem", async (req, res) => {
   try {
     const foodItems = await FoodItem.findOne({ _id: req.body.id });
-    console.log(foodItems);
+    // console.log(foodItems);
     return res.send(foodItems);
   } catch (error) {
     res.status(500).send("Server Error.");

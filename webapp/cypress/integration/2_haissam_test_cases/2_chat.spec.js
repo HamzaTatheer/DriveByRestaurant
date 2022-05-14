@@ -1,0 +1,32 @@
+/// <reference types="Cypress" />
+
+context("Place order", { scrollBehavior: "center" }, () => {
+  beforeEach(() => {
+    cy.visit("/");
+    cy.get("button").contains("Login").click();
+    cy.contains("Phone no").parent().find("input").type("03328409924");
+    cy.contains("Password").parent().find("input").type("12345678");
+    cy.get("button").contains("Login").click();
+    cy.wait(2000);
+  });
+
+  //Chat with customer support
+  it("Chat with customer support", () => {
+    cy.get(".myButton")
+      .children("button")
+      .contains("Chat with Customer Support")
+      .click();
+    cy.wait(2000);
+
+    cy.url().then((url) => {
+      expect(url).to.equal("http://localhost:3001/customer/chat");
+    });
+
+    cy.get(".custom-input input").type("Hello! When will my order be ready?");
+    cy.get(".myButton").children("button").contains("send").click();
+
+    cy.get(".chat-container")
+      .children("div")
+      .contains("03328409924: Hello! When will my order be ready?");
+  });
+});

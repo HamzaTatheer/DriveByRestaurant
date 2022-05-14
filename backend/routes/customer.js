@@ -49,8 +49,10 @@ router.post("/signup", upload.single("avatar"), async (req, res) => {
 
 //orderFood
 router.post("/orderFood", auth, async (req, res) => {
+  console.log(res.body);
+
   try {
-    console.log(req.body);
+    console.log(req.user);
 
     if (req.user.role != 2)
       return res.status(403).send("no privelage to access resource");

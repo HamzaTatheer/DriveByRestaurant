@@ -86,7 +86,10 @@ router.post(
     try {
       const { error } = validateFoodItems(req.body);
 
-      if (error) return res.status(400).send(error.details[0].message);
+      if (error) {
+        console.log(error);
+        return res.status(400).send(error.details[0].message);
+      }
 
       const category = await Category.findById(req.body.category);
 
