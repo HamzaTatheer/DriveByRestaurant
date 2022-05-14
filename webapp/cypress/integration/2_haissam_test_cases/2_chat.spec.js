@@ -10,30 +10,6 @@ context("Place order", { scrollBehavior: "center" }, () => {
     cy.wait(2000);
   });
 
-  //Order Food
-  it("Order food", () => {
-    //cy.get(".MuiBackdrop-root").then((abc)=>{abc.click({ force: true })});
-
-    cy.get(".card .card-body .d-flex div .card-title")
-      .contains("Chunky Burger")
-      .parent()
-      .parent()
-      .parent()
-      .children(".d-flex")
-      .children(".btn")
-      .click();
-
-    cy.get("small").contains("1").click();
-    cy.wait(2000);
-    cy.get(".myButton").click();
-    cy.wait(2000);
-    cy.url().then((url) => {
-      expect(url).to.equal("http://localhost:3001/customer/status");
-    });
-    cy.wait(2000);
-    cy.get(".menuButton").contains("Logout").click();
-  });
-
   //Chat with customer support
   it("Chat with customer support", () => {
     cy.get(".myButton")
