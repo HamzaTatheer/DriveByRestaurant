@@ -8,11 +8,11 @@ export default function (data) {
   check(res, {
     "is status 200": (r) => r.status === 200,
     "All menu items received": (r) => {
-      const json = r.json();
+      const json_obj = r.json();
       return (
-        json.length >= 2 &&
-        json[0].name === "Chunky Burger" &&
-        json[1].name === "Pepsi"
+        json_obj.length >= 2 &&
+        json_obj[0].name === "Chunky Burger" &&
+        json_obj[1].name === "Pepsi"
       );
     },
   });
