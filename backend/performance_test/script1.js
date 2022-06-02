@@ -4,18 +4,17 @@ import { check } from "k6";
 export const options = {
   discardResponseBodies: false,
   scenarios: {
-    scene1: {
-      executor: "ramping-vus",
-      startVUs: 0,
+    scene2: {
+      executor: "ramping-arrival-rate",
+      preAllocatedVUs: 50,
+      maxVUs: 15000,
       stages: [
-        { duration: "5s", target: 50 },
-        { duration: "30s", target: 50 },
-        { duration: "5s", target: 500 },
-        { duration: "30s", target: 500 },
-        { duration: "5s", target: 1000 },
-        { duration: "1m", target: 1000 },
+        { target: 100, duration: "5s" },
+        { target: 200, duration: "5s" },
+        { target: 200, duration: "1m" },
+        { target: 500, duration: "30s" },
+        { target: 500, duration: "1m" },
       ],
-      gracefulRampDown: "0s",
     },
   },
 };
