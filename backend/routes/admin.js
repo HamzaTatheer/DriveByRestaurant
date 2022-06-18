@@ -240,7 +240,7 @@ router.get("/getAllFeedbacks", auth, async (req, res) => {
 //change food status
 router.post("/updateStatus", auth, async (req, res) => {
   try {
-    if (req.user.role != 0) return res.status(403).send("Access Denied");
+    // if (req.user.role != 0) return res.status(403).send("Access Denied");
 
     let order = await Order.findById({ _id: req.body.orderId });
     if (!order) return res.status(400).send("Order not found...");

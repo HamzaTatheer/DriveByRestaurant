@@ -35,6 +35,9 @@ test("Validate Food Item", () => {
 
   let validation = validateFoodItems(item);
   expect(validation.error.details.length).toBeGreaterThan(0);
+  expect(validation.error.message).toBe(
+    '"name" length must be at least 3 characters long'
+  );
 
   item = {
     name: "Burger",
@@ -46,6 +49,9 @@ test("Validate Food Item", () => {
 
   validation = validateFoodItems(item);
   expect(validation.error.details.length).toBeGreaterThan(0);
+  expect(validation.error.message).toBe(
+    '"price" must be greater than or equal to 0'
+  );
 });
 
 test("Get most ordered item", () => {
@@ -82,6 +88,7 @@ test("category validation", () => {
 
   let validation = validateCategory(cat);
   expect(validation.error.details.length).toBeGreaterThan(0);
+  expect(validation.error.message).toBe('"name" must be a string');
 
   cat = {
     _id: "625156a7e01dec6e20d65c52",
@@ -90,6 +97,9 @@ test("category validation", () => {
 
   validation = validateCategory(cat);
   expect(validation.error.details.length).toBeGreaterThan(0);
+  expect(validation.error.message).toBe(
+    '"name" length must be at least 3 characters long'
+  );
 });
 
 test("feedback validation", () => {
@@ -102,6 +112,9 @@ test("feedback validation", () => {
 
   let validation = validateFeedback(feedback);
   expect(validation.error.details.length).toBeGreaterThan(0);
+  expect(validation.error.message).toBe(
+    '"rating" must be greater than or equal to 1'
+  );
 
   feedback = {
     user: { name: "haissam" },
@@ -112,4 +125,5 @@ test("feedback validation", () => {
 
   validation = validateFeedback(feedback);
   expect(validation.error.details.length).toBeGreaterThan(0);
+  expect(validation.error.message).toBe('"message" must be a string');
 });

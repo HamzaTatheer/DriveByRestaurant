@@ -63,7 +63,9 @@ describe("get /api/menu/menu", () => {
       .set("Accept", "application/json")
       .expect(200)
       .then((res) => {
+        debugger;
         expect(res.body.length).toBeGreaterThan(0);
+        console.log(res);
       });
   });
 });
